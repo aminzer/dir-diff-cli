@@ -17,8 +17,8 @@ dir-diff --source "d:/work" --target "e:/backups/work"
 ##### Arguments
 
 * --help                         : show tool help
-* --source [path]           (-s) : path to the source directory
-* --target [path]           (-t) : path to the target directory
+* --source {path}           (-s) : path to the source directory
+* --target {path}           (-t) : path to the target directory
 * --skip-added              (-a) : added files/directories are not considered
 * --skip-modified           (-m) : modified files are not considered
 * --skip-removed            (-r) : removed files/directories are not considered
