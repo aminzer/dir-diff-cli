@@ -1,8 +1,8 @@
-const { log } = require('./logging');
+import { log } from './logging';
 
-module.exports = args => {
-  log(`Source directory: "${args['source']}"`);
-  log(`Target directory: "${args['target']}"`);
+export default function logCmdArgs(args) {
+  log(`Source directory: "${args.source}"`);
+  log(`Target directory: "${args.target}"`);
 
   if (args['skip-added']) {
     log(' ! Added files are not considered. [ --skip-added ]');
@@ -23,4 +23,4 @@ module.exports = args => {
   if (args['skip-extra-iterations']) {
     log(' ! Children of added/removed directories are not considered. [ --skip-extra-iterations ]');
   }
-};
+}

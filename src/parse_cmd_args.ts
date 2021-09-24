@@ -1,38 +1,40 @@
-const parseCmdArgs = require('command-line-args');
+import * as commandLineArgs from 'command-line-args';
 
 const cmdArgDefinitions = [
   {
     name: 'source',
     alias: 's',
-    type: String
+    type: String,
   }, {
     name: 'target',
     alias: 't',
-    type: String
+    type: String,
   }, {
     name: 'skip-added',
     alias: 'a',
-    type: Boolean
+    type: Boolean,
   }, {
     name: 'skip-modified',
     alias: 'm',
-    type: Boolean
+    type: Boolean,
   }, {
     name: 'skip-removed',
     alias: 'r',
-    type: Boolean
+    type: Boolean,
   }, {
     name: 'skip-content-comparison',
     alias: 'c',
-    type: Boolean
+    type: Boolean,
   }, {
     name: 'skip-extra-iterations',
     alias: 'e',
-    type: Boolean
+    type: Boolean,
   }, {
     name: 'help',
-    type: Boolean
-  }
+    type: Boolean,
+  },
 ];
 
-module.exports = () => parseCmdArgs(cmdArgDefinitions);
+export default function parseCmdArgs() {
+  return commandLineArgs(cmdArgDefinitions);
+}

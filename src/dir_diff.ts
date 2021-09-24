@@ -1,27 +1,34 @@
 #!/usr/bin/env node
 
-const dirDiff = require('@aminzer/dir-diff');
-const { log } = require('../src/logging');
-const parseCmdArgs = require('../src/parse_cmd_args');
-const logCmdArgs = require('../src/log_cmd_args');
-const helpMessage = require('../src/help_message');
-const ComparisonProgress = require('../src/comparison_progress');
+import { compareDirectories } from '@aminzer/dir-diff';
+import { log } from './logging';
+import parseCmdArgs from './parse_cmd_args';
+import logCmdArgs from './log_cmd_args';
+import helpMessage from './help_message';
+import ComparisonProgress from './comparison_progress';
+
+function logFsEntry(fsEntry, prefix) {
+  const entryType = fsEntry.isDirectory ? 'dir ' : 'file';
+  const entryPath = fsEntry.relativePath;
+
+  log(`${prefix} | ${entryType} | ${entryPath}`);
+}
 
 (async () => {
   try {
     const args = parseCmdArgs();
 
-    if (args['help']) {
+    if (args.help) {
       log(helpMessage);
       return;
     }
 
-    const sourceDir = args['source'];
+    const sourceDir = args.source;
     if (!sourceDir) {
       throw new Error('Source directory is not set. [ --source <path> ]');
     }
 
-    const targetDir = args['target'];
+    const targetDir = args.target;
     if (!targetDir) {
       throw new Error('Target directory is not set. [ --target <path> ]');
     }
@@ -33,32 +40,32 @@ const ComparisonProgress = require('../src/comparison_progress');
     const diff = {
       added: [],
       modified: [],
-      removed: []
+      removed: [],
     };
 
     const dirDiffOpts = {
-      onAddedEntry: args['skip-added'] ? null : fsEntry => {
+      onSourceOnlyEntry: args['skip-added'] ? null : (fsEntry) => {
         diff.added.push(fsEntry);
         comparisonProgress.considerFoundEntry(fsEntry, 'added');
       },
-      onModifiedEntry: args['skip-modified'] ? null : fsEntry => {
+      onDifferentEntries: args['skip-modified'] ? null : (fsEntry) => {
         diff.modified.push(fsEntry);
         comparisonProgress.considerFoundEntry(fsEntry, 'modified');
       },
-      onRemovedEntry: args['skip-removed'] ? null : fsEntry => {
+      onTargetOnlyEntry: args['skip-removed'] ? null : (fsEntry) => {
         diff.removed.push(fsEntry);
         comparisonProgress.considerFoundEntry(fsEntry, 'removed');
       },
-      onEachEntry: fsEntry => {
+      onEachEntry: (fsEntry) => {
         comparisonProgress.considerProcessingEntry(fsEntry);
       },
       skipContentComparison: args['skip-content-comparison'] || false,
-      skipExtraIterations: args['skip-extra-iterations'] || false
+      skipExcessNestedIterations: args['skip-extra-iterations'] || false,
     };
 
     comparisonProgress.startLogging();
 
-    await dirDiff(sourceDir, targetDir, dirDiffOpts);
+    await compareDirectories(sourceDir, targetDir, dirDiffOpts);
 
     comparisonProgress.finishLogging();
     comparisonProgress.finish();
@@ -71,10 +78,9 @@ const ComparisonProgress = require('../src/comparison_progress');
       return;
     }
 
-    diff.added.forEach(fsEntry => logFsEntry(fsEntry, 'added   '));
-    diff.modified.forEach(fsEntry => logFsEntry(fsEntry, 'modified'));
-    diff.removed.forEach(fsEntry => logFsEntry(fsEntry, 'removed '));
-
+    diff.added.forEach((fsEntry) => logFsEntry(fsEntry, 'added   '));
+    diff.modified.forEach((fsEntry) => logFsEntry(fsEntry, 'modified'));
+    diff.removed.forEach((fsEntry) => logFsEntry(fsEntry, 'removed '));
   } catch (err) {
     log();
     log('Error occurred!');
@@ -82,10 +88,3 @@ const ComparisonProgress = require('../src/comparison_progress');
     log('Use [ --help ] option to see available arguments.');
   }
 })();
-
-function logFsEntry(fsEntry, prefix) {
-  const entryType = fsEntry.isDirectory ? 'dir ' : 'file';
-  const entryPath = fsEntry.relativePath + (fsEntry.isDirectory ? '/' : '');
-
-  log(`${prefix} | ${entryType} | ${entryPath}`);
-}
