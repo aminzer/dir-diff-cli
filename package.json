@@ -2,7 +2,7 @@
   "name": "@aminzer/dir-diff-cli",
   "description": "Command line tool for recursive directory comparison",
   "version": "1.0.1",
-  "license": "ISC",
+  "license": "MIT",
   "author": "aminzer",
   "keywords": [
     "directory",
