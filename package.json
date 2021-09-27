@@ -32,7 +32,7 @@
     "prepare": "run-s husky:prepare build"
   },
   "dependencies": {
-    "@aminzer/dir-diff": "^4.0.1",
+    "@aminzer/dir-diff": "^4.0.2",
     "command-line-args": "^5.2.0",
     "single-line-log": "^1.1.2"
   },
