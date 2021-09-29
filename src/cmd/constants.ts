@@ -1,5 +1,5 @@
 export enum Commands {
-  SHOW_HELP = 'help',
+  SHOW_HELP_MESSAGE = 'help',
   COMPARE_DIRECTORIES = 'compare',
 }
 

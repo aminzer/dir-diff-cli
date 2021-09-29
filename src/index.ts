@@ -2,7 +2,7 @@
 
 import { parseCmdArgs, Commands } from './cmd';
 import { log } from './logging';
-import showHelp from './show_help';
+import showHelpMessage from './show_help_message';
 import compareDirectories from './compare_directories';
 
 const allowedCommands = Object.values(Commands);
@@ -21,8 +21,8 @@ async function main(): Promise<void> {
     throw new Error(`Command "${command}" not found. Allowed commands: ${formattedAllowedCommands}.`);
   }
 
-  if (command === Commands.SHOW_HELP) {
-    showHelp();
+  if (command === Commands.SHOW_HELP_MESSAGE) {
+    showHelpMessage();
   }
 
   if (command === Commands.COMPARE_DIRECTORIES) {

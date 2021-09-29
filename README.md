@@ -24,7 +24,7 @@ dir-diff compare --source "d:/work" --target "e:/backups/work"
 * --skip-content-comparison       (-C) - content comparison is skipped, files are compared by size only
 * --skip-excess-nested-iterations (-X) - children of source-only and target-only directories are not considered 
 
-### Show help
+### Show help message
 
 ```
 dir-diff help
