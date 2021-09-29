@@ -1,39 +1,54 @@
-import {
-  CompareDirectoriesArgs,
-  CompareDirectoriesArgAliases,
-} from './constants';
+import { CompareDirectoriesArgs } from './constants';
 
-export const CommandDefinition = [{
+type ArgDefinition = {
+  name: string;
+  alias?: string;
+  type?: Function;
+  defaultOption?: boolean;
+  description?: string;
+  valueDescription?: string;
+};
+
+export const CommandArgDefinition: ArgDefinition[] = [{
   name: 'command',
   defaultOption: true,
 }];
 
-export const CompareDirectoriesDefinition = [{
+export const CompareDirectoriesArgsDefinition: ArgDefinition[] = [{
   name: CompareDirectoriesArgs.SOURCE_DIR_PATH,
-  alias: CompareDirectoriesArgAliases.SOURCE_DIR_PATH,
+  alias: 's',
   type: String,
+  description: 'Path to the source directory',
+  valueDescription: ' <path>',
 }, {
   name: CompareDirectoriesArgs.TARGET_DIR_PATH,
-  alias: CompareDirectoriesArgAliases.TARGET_DIR_PATH,
+  alias: 't',
   type: String,
+  description: 'Path to the target directory',
+  valueDescription: ' <path>',
 }, {
   name: CompareDirectoriesArgs.SKIP_SOURCE_ONLY,
-  alias: CompareDirectoriesArgAliases.SKIP_SOURCE_ONLY,
+  alias: 'S',
   type: Boolean,
+  description: 'Source-only files/directories are not considered',
 }, {
   name: CompareDirectoriesArgs.SKIP_TARGET_ONLY,
-  alias: CompareDirectoriesArgAliases.SKIP_TARGET_ONLY,
+  alias: 'T',
   type: Boolean,
+  description: 'Target-only files/directories are not considered',
 }, {
   name: CompareDirectoriesArgs.SKIP_DIFFERENT,
-  alias: CompareDirectoriesArgAliases.SKIP_DIFFERENT,
+  alias: 'D',
   type: Boolean,
+  description: 'Different files are not considered',
 }, {
   name: CompareDirectoriesArgs.SKIP_CONTENT_COMPARISON,
-  alias: CompareDirectoriesArgAliases.SKIP_CONTENT_COMPARISON,
+  alias: 'C',
   type: Boolean,
+  description: 'Content comparison is skipped, files are compared by size only',
 }, {
   name: CompareDirectoriesArgs.SKIP_EXCESS_NESTED_ITERATIONS,
-  alias: CompareDirectoriesArgAliases.SKIP_EXCESS_NESTED_ITERATIONS,
+  alias: 'X',
   type: Boolean,
+  description: 'Children of source-only and target-only directories are not considered',
 }];

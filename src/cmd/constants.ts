@@ -12,13 +12,3 @@ export enum CompareDirectoriesArgs {
   SKIP_CONTENT_COMPARISON = 'skip-content-comparison',
   SKIP_EXCESS_NESTED_ITERATIONS = 'skip-excess-nested-iterations',
 }
-
-export enum CompareDirectoriesArgAliases {
-  SOURCE_DIR_PATH = 's',
-  TARGET_DIR_PATH = 't',
-  SKIP_SOURCE_ONLY = 'S',
-  SKIP_TARGET_ONLY = 'T',
-  SKIP_DIFFERENT = 'D',
-  SKIP_CONTENT_COMPARISON = 'C',
-  SKIP_EXCESS_NESTED_ITERATIONS = 'X',
-}

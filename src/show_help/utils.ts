@@ -1,9 +1,12 @@
-export function getMaxLength(strings: string[]): number {
-  const stringLengths: number[] = strings.map((str) => str.length);
+function getMaxLength(strings: string[]): number {
+  const stringLengths = strings.map((str) => str.length);
 
   return Math.max(...stringLengths);
 }
 
-export function padRight(str: string, length: number): string {
-  return str.padEnd(length, ' ');
+// eslint-disable-next-line import/prefer-default-export
+export function padToSameWidth(strings: string[]): string[] {
+  const maxLength = getMaxLength(strings);
+
+  return strings.map((str) => str.padEnd(maxLength, ' '));
 }

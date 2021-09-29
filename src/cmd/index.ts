@@ -1,2 +1,3 @@
 export { default as parseCmdArgs } from './parse_cmd_args';
-export { Commands, CompareDirectoriesArgs, CompareDirectoriesArgAliases } from './constants';
+export { Commands, CompareDirectoriesArgs } from './constants';
+export { CompareDirectoriesArgsDefinition } from './args_definitions';
