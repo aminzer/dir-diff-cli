@@ -8,19 +8,24 @@ Command line tool for recursive directory comparison.
 npm install -g @aminzer/dir-diff-cli
 ```
 
-### Usage Example
+### Compare directories
 
 ```
-dir-diff --source "d:/work" --target "e:/backups/work"
+dir-diff compare --source "d:/work" --target "e:/backups/work"
 ```
 
 ##### Arguments
 
-* --help                         : show tool help
-* --source {path}           (-s) : path to the source directory
-* --target {path}           (-t) : path to the target directory
-* --skip-added              (-a) : added files/directories are not considered
-* --skip-modified           (-m) : modified files are not considered
-* --skip-removed            (-r) : removed files/directories are not considered
-* --skip-content-comparison (-c) : files are compared by size only; content comparison is skipped
-* --skip-extra-iterations   (-e) : child-entries of added/removed directories are not considered
+* --source <path>                 (-s) - path to the source directory
+* --target <path>                 (-t) - path to the target directory
+* --skip-source-only              (-S) - source-only files/directories are not considered
+* --skip-target-only              (-T) - target-only files/directories are not considered
+* --skip-different                (-D) - different files are not considered
+* --skip-content-comparison       (-C) - content comparison is skipped, files are compared by size only
+* --skip-excess-nested-iterations (-X) - children of source-only and target-only directories are not considered 
+
+### Show help
+
+```
+dir-diff help
+```
