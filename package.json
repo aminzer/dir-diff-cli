@@ -19,9 +19,9 @@
     "type": "git",
     "url": "https://github.com/aminzer/dir-diff-cli.git"
   },
-  "main": "./dist/dir_diff.js",
+  "main": "dist/index.js",
   "bin": {
-    "dir-diff": "./dist/dir_diff.js"
+    "dir-diff": "dist/index.js"
   },
   "scripts": {
     "build": "tsc --project tsconfig.json",
@@ -32,7 +32,7 @@
     "prepare": "run-s husky:prepare build"
   },
   "dependencies": {
-    "@aminzer/dir-diff": "^4.0.2",
+    "@aminzer/dir-diff": "^4.0.4",
     "command-line-args": "^5.2.0",
     "single-line-log": "^1.1.2"
   },

@@ -1,6 +1,6 @@
-import { logSingleLine } from './logging';
+import { logSingleLine } from '../logging';
 
-class ComparisonProgress {
+export default class ComparisonProgress {
   processedFileCount: number = 0;
 
   processedDirCount: number = 0;
@@ -114,5 +114,3 @@ class ComparisonProgress {
     return this.processingEntry ? `\nProcessing: "${this.processingEntry.absolutePath}"` : '';
   }
 }
-
-export default ComparisonProgress;
