@@ -6,7 +6,7 @@ type DifferenceSetStore = {
 };
 
 export default class DifferenceSet {
-  store: DifferenceSetStore;
+  private store: DifferenceSetStore;
 
   constructor() {
     this.store = {

@@ -3,15 +3,7 @@ import { CompareDirectoriesArgs } from '../cmd';
 import { log } from '../logging';
 import logCmdArgs from './log_cmd_args';
 import ComparisonProgress from './comparison_progress';
-import DifferenceSet from './difference_set';
 import DifferenceType from './difference_type';
-
-function logFsEntry(fsEntry, prefix) {
-  const entryType = fsEntry.isDirectory ? 'dir ' : 'file';
-  const entryPath = fsEntry.relativePath;
-
-  log(`${prefix} | ${entryType} | ${entryPath}`);
-}
 
 export default async function compareDirectories(args: object): Promise<void> {
   const sourceDirPath = args[CompareDirectoriesArgs.SOURCE_DIR_PATH];
@@ -28,44 +20,37 @@ export default async function compareDirectories(args: object): Promise<void> {
   log();
 
   const comparisonProgress = new ComparisonProgress();
-  const differenceSet = new DifferenceSet();
 
-  const dirDiffOpts = {
+  const compareDirectoriesOpts = {
     onSourceOnlyEntry: args[CompareDirectoriesArgs.SKIP_SOURCE_ONLY] ? null : (fsEntry: FsEntry) => { // eslint-disable-line max-len
-      differenceSet.add(fsEntry, DifferenceType.SOURCE_ONLY);
-      comparisonProgress.considerFoundEntry(fsEntry, 'added');
+      comparisonProgress.considerFsEntry(fsEntry, DifferenceType.SOURCE_ONLY);
     },
     onTargetOnlyEntry: args[CompareDirectoriesArgs.SKIP_TARGET_ONLY] ? null : (fsEntry: FsEntry) => { // eslint-disable-line max-len
-      differenceSet.add(fsEntry, DifferenceType.TARGET_ONLY);
-      comparisonProgress.considerFoundEntry(fsEntry, 'removed');
+      comparisonProgress.considerFsEntry(fsEntry, DifferenceType.TARGET_ONLY);
     },
     onDifferentEntries: args[CompareDirectoriesArgs.SKIP_DIFFERENT] ? null : (fsEntry: FsEntry) => { // eslint-disable-line max-len
-      differenceSet.add(fsEntry, DifferenceType.DIFFERENT);
-      comparisonProgress.considerFoundEntry(fsEntry, 'modified');
+      comparisonProgress.considerFsEntry(fsEntry, DifferenceType.DIFFERENT);
     },
     onEachEntry: (fsEntry: FsEntry) => {
-      comparisonProgress.considerProcessingEntry(fsEntry);
+      comparisonProgress.considerFsEntry(fsEntry);
     },
     skipContentComparison: args[CompareDirectoriesArgs.SKIP_CONTENT_COMPARISON] || false,
     skipExcessNestedIterations: args[CompareDirectoriesArgs.SKIP_EXCESS_NESTED_ITERATIONS] || false,
   };
 
-  comparisonProgress.startLogging();
+  comparisonProgress.start();
 
-  await compareDirectoriesUtil(sourceDirPath, targetDirPath, dirDiffOpts);
+  await compareDirectoriesUtil(sourceDirPath, targetDirPath, compareDirectoriesOpts);
 
-  comparisonProgress.finishLogging();
   comparisonProgress.finish();
-  comparisonProgress.log();
+
   log();
   log();
 
-  if (differenceSet.isEmpty()) {
+  if (comparisonProgress.areDirectoriesEqual()) {
     log('Source and target directories have the same content.');
     return;
   }
 
-  differenceSet.getAll(DifferenceType.SOURCE_ONLY).forEach((fsEntry) => logFsEntry(fsEntry, 'added   '));
-  differenceSet.getAll(DifferenceType.TARGET_ONLY).forEach((fsEntry) => logFsEntry(fsEntry, 'modified'));
-  differenceSet.getAll(DifferenceType.DIFFERENT).forEach((fsEntry) => logFsEntry(fsEntry, 'removed '));
+  comparisonProgress.logDifferenceSet();
 }

@@ -1,106 +1,151 @@
-import { logSingleLine } from '../logging';
+/* eslint-disable class-methods-use-this */
+
+import { FsEntry } from '@aminzer/dir-diff';
+import { log, logSingleLine } from '../logging';
+import DifferenceType from './difference_type';
+import DifferenceSet from './difference_set';
 
 export default class ComparisonProgress {
-  processedFileCount: number = 0;
+  private statistic: {
+    processedFileCount: number;
+    processedDirCount: number;
+    sourceOnlyFileCount: number;
+    sourceOnlyDirCount: number;
+    targetOnlyFileCount: number;
+    targetOnlyDirCount: number;
+    differentFileCount: number;
+  } = {
+    processedFileCount: 0,
+    processedDirCount: 0,
+    sourceOnlyFileCount: 0,
+    sourceOnlyDirCount: 0,
+    targetOnlyFileCount: 0,
+    targetOnlyDirCount: 0,
+    differentFileCount: 0,
+  };
 
-  processedDirCount: number = 0;
+  private differenceSet: DifferenceSet = new DifferenceSet();
 
-  addedFileCount: number = 0;
+  private inProgress: boolean;
 
-  addedDirCount: number = 0;
+  private statusLoggingIntervalId: any;
 
-  modifiedFileCount: number = 0;
+  private statusLoggingDelay: number = 200;
 
-  removedFileCount: number = 0;
+  private processingFsEntry: FsEntry;
 
-  removedDirCount: number = 0;
-
-  loggingIntervalId: any = null;
-
-  processingEntry: any = null;
-
-  isFinished: boolean = false;
-
-  considerProcessingEntry(fsEntry) {
-    this.increaseProcessedEntriesCount();
-    this.processingEntry = fsEntry;
+  start(): void {
+    this.inProgress = true;
+    this.startStatusLogging();
   }
 
-  considerFoundEntry(fsEntry, type) {
-    this[`${type}${fsEntry.isFile ? 'File' : 'Dir'}Count`] += 1;
+  finish(): void {
+    this.inProgress = false;
+    this.finishStatusLogging();
+    this.logStatus();
   }
 
-  finish() {
-    this.increaseProcessedEntriesCount();
-    this.processingEntry = null;
-    this.isFinished = true;
+  considerFsEntry(fsEntry: FsEntry, differenceType?: DifferenceType): void {
+    this.processingFsEntry = fsEntry;
+
+    const statisticKey = this.getStatisticKey(fsEntry, differenceType);
+    this.statistic[statisticKey] += 1;
+
+    if (differenceType) {
+      this.differenceSet.add(fsEntry, differenceType);
+    }
   }
 
-  startLogging() {
-    this.loggingIntervalId = setInterval(this.log.bind(this), 200);
+  areDirectoriesEqual(): boolean {
+    return this.differenceSet.isEmpty();
   }
 
-  finishLogging() {
-    clearInterval(this.loggingIntervalId);
-    this.loggingIntervalId = null;
+  logDifferenceSet(): void {
+    [
+      DifferenceType.SOURCE_ONLY,
+      DifferenceType.DIFFERENT,
+      DifferenceType.TARGET_ONLY,
+    ].forEach((differenceType) => {
+      this.differenceSet.getAll(differenceType).forEach((fsEntry) => {
+        this.logFsEntry(fsEntry, differenceType);
+      });
+    });
   }
 
-  log() {
+  private startStatusLogging(): void {
+    this.statusLoggingIntervalId = setInterval(this.logStatus.bind(this), this.statusLoggingDelay);
+  }
+
+  private finishStatusLogging(): void {
+    clearInterval(this.statusLoggingIntervalId);
+  }
+
+  private getStatisticKey(fsEntry: FsEntry, differenceType: DifferenceType): string {
+    switch (differenceType) {
+      case DifferenceType.SOURCE_ONLY:
+        return fsEntry.isFile ? 'sourceOnlyFileCount' : 'sourceOnlyDirCount';
+
+      case DifferenceType.TARGET_ONLY:
+        return fsEntry.isFile ? 'targetOnlyFileCount' : 'targetOnlyDirCount';
+
+      case DifferenceType.DIFFERENT:
+        return 'differentFileCount';
+
+      default:
+        return fsEntry.isFile ? 'processedFileCount' : 'processedDirCount';
+    }
+  }
+
+  private logStatus(): void {
     logSingleLine(this.status);
   }
 
-  increaseProcessedEntriesCount() {
-    if (!this.processingEntry) {
-      return;
-    }
-
-    if (this.processingEntry.isFile) {
-      this.processedFileCount += 1;
-    } else {
-      this.processedDirCount += 1;
-    }
-  }
-
-  get status() {
+  private get status(): string {
     return this.comparisonProcessStatus
       + this.processedStatus
       + this.comparisonStatus
       + this.processingStatus;
   }
 
-  get comparisonProcessStatus() {
-    return this.isFinished ? 'Comparison process is finished.' : 'Comparison process is in progress:';
+  private get comparisonProcessStatus(): string {
+    return this.inProgress ? 'Comparison is in progress:' : 'Comparison is finished.';
   }
 
-  get processedStatus() {
-    return `\nProcessed: ${this.processedFileCount} files, ${this.processedDirCount} directories.`;
+  private get processedStatus(): string {
+    const { processedFileCount, processedDirCount } = this.statistic;
+
+    return `\nProcessed: ${processedFileCount} files, ${processedDirCount} directories.`;
   }
 
-  get comparisonStatus() {
+  private get comparisonStatus(): string {
     const {
-      addedFileCount, addedDirCount, modifiedFileCount, removedFileCount, removedDirCount,
-    } = this;
+      sourceOnlyFileCount,
+      sourceOnlyDirCount,
+      targetOnlyFileCount,
+      targetOnlyDirCount,
+      differentFileCount,
+    } = this.statistic;
 
     const foundEntries = [];
 
-    if (addedFileCount > 0) {
-      foundEntries.push(`${addedFileCount} added files`);
+    if (sourceOnlyFileCount > 0) {
+      foundEntries.push(`${sourceOnlyFileCount} source-only files`);
     }
 
-    if (addedDirCount > 0) {
-      foundEntries.push(`${addedDirCount} added dirs`);
+    if (sourceOnlyDirCount > 0) {
+      foundEntries.push(`${sourceOnlyDirCount} source-only dirs`);
     }
 
-    if (modifiedFileCount > 0) {
-      foundEntries.push(`${modifiedFileCount} modified files`);
+    if (targetOnlyFileCount > 0) {
+      foundEntries.push(`${targetOnlyFileCount} target-only files`);
     }
 
-    if (removedFileCount > 0) {
-      foundEntries.push(`${removedFileCount} removed files`);
+    if (targetOnlyDirCount > 0) {
+      foundEntries.push(`${targetOnlyDirCount} target-only dirs`);
     }
 
-    if (removedDirCount > 0) {
-      foundEntries.push(`${removedDirCount} removed dirs`);
+    if (differentFileCount > 0) {
+      foundEntries.push(`${differentFileCount} different files`);
     }
 
     if (foundEntries.length === 0) {
@@ -110,7 +155,35 @@ export default class ComparisonProgress {
     return `\nFound: ${foundEntries.join(', ')}.`;
   }
 
-  get processingStatus() {
-    return this.processingEntry ? `\nProcessing: "${this.processingEntry.absolutePath}"` : '';
+  private get processingStatus(): string {
+    return this.inProgress && this.processingFsEntry ? `\nProcessing: "${this.processingFsEntry.absolutePath}"` : '';
+  }
+
+  private logFsEntry(fsEntry: FsEntry, differenceType: DifferenceType): void {
+    const formattedDifferenceType = this.formatDifferenceType(differenceType);
+    const entryType = this.formatFsEntryType(fsEntry);
+    const entryPath = fsEntry.relativePath;
+
+    log(`${formattedDifferenceType} | ${entryType} | ${entryPath}`);
+  }
+
+  private formatDifferenceType(differenceType: DifferenceType) :string {
+    switch (differenceType) {
+      case DifferenceType.SOURCE_ONLY:
+        return 'source-only';
+
+      case DifferenceType.TARGET_ONLY:
+        return 'target-only';
+
+      case DifferenceType.DIFFERENT:
+        return 'different  ';
+
+      default:
+        return '';
+    }
+  }
+
+  private formatFsEntryType(fsEntry : FsEntry): string {
+    return fsEntry.isDirectory ? 'dir' : '   ';
   }
 }
