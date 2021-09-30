@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 
 import { FsEntry } from '@aminzer/dir-diff';
-import { log, logSingleLine } from '../logging';
+import { log, logSingleLine, clearSingleLine } from '../logging';
 import DifferenceType from './difference_type';
 import DifferenceSet from './difference_set';
 
@@ -39,10 +39,15 @@ export default class ComparisonProgress {
     this.startStatusLogging();
   }
 
-  finish(): void {
+  finish({ clearStatus = false } = {}): void {
     this.inProgress = false;
     this.finishStatusLogging();
-    this.logStatus();
+
+    if (clearStatus) {
+      this.clearStatus();
+    } else {
+      this.logStatus();
+    }
   }
 
   considerFsEntry(fsEntry: FsEntry, differenceType?: DifferenceType): void {
@@ -98,6 +103,10 @@ export default class ComparisonProgress {
 
   private logStatus(): void {
     logSingleLine(this.status);
+  }
+
+  private clearStatus(): void {
+    clearSingleLine();
   }
 
   private get status(): string {

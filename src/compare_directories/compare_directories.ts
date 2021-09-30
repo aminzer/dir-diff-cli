@@ -40,7 +40,12 @@ export default async function compareDirectories(args: object): Promise<void> {
 
   comparisonProgress.start();
 
-  await compareDirectoriesUtil(sourceDirPath, targetDirPath, compareDirectoriesOpts);
+  try {
+    await compareDirectoriesUtil(sourceDirPath, targetDirPath, compareDirectoriesOpts);
+  } catch (err) {
+    comparisonProgress.finish({ clearStatus: true });
+    throw err;
+  }
 
   comparisonProgress.finish();
 
@@ -49,8 +54,7 @@ export default async function compareDirectories(args: object): Promise<void> {
 
   if (comparisonProgress.areDirectoriesEqual()) {
     log('Source and target directories have the same content.');
-    return;
+  } else {
+    comparisonProgress.logDifferenceSet();
   }
-
-  comparisonProgress.logDifferenceSet();
 }
