@@ -1,20 +1,18 @@
 import { Commands, CompareDirectoriesArgsDefinition } from '../cmd';
 import { padToSameWidth } from './utils';
 
-const formattedArgNames = padToSameWidth(
+const compareDirectoriesFormattedArgNames = padToSameWidth(
   CompareDirectoriesArgsDefinition.map(({ name, valueDescription }) => (
     valueDescription ? `${name}${valueDescription}` : name
   )),
 );
 
-const helpMessageLines = [
-  `dir-diff ${Commands.COMPARE_DIRECTORIES} [args...]`,
-];
+const compareDirectoriesArgsDescription = CompareDirectoriesArgsDefinition
+  .map(({ alias, description }, index) => {
+    const formattedName = compareDirectoriesFormattedArgNames[index];
 
-CompareDirectoriesArgsDefinition.forEach(({ alias, description }, index) => {
-  const formattedName = formattedArgNames[index];
+    return `  --${formattedName} (-${alias}) - ${description.toLowerCase()}`;
+  }, '')
+  .join('\n');
 
-  helpMessageLines.push(`  --${formattedName} (-${alias}) - ${description.toLowerCase()}`);
-});
-
-export default helpMessageLines.join('\n');
+export default `dir-diff ${Commands.COMPARE_DIRECTORIES} [args...]\n${compareDirectoriesArgsDescription}`;
