@@ -1,4 +1,4 @@
-import { compareDirectories as compareDirectories1 } from '@aminzer/dir-diff';
+import * as difDiff from '@aminzer/dir-diff';
 import { CompareDirectoriesArgs } from '../cmd';
 import { log } from '../logging';
 import logCmdArgs from './log_cmd_args';
@@ -54,7 +54,7 @@ export default async function compareDirectories(args: object): Promise<void> {
 
   comparisonProgress.startLogging();
 
-  await compareDirectories1(sourceDirPath, targetDirPath, dirDiffOpts);
+  await difDiff.compareDirectories(sourceDirPath, targetDirPath, dirDiffOpts);
 
   comparisonProgress.finishLogging();
   comparisonProgress.finish();
