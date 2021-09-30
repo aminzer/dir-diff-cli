@@ -23,6 +23,9 @@
   "bin": {
     "dir-diff": "dist/index.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc --project tsconfig.json",
     "build:watch": "npm run build -- --watch",
