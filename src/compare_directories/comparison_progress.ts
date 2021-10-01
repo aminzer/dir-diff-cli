@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 
 import { FsEntry } from '@aminzer/dir-diff';
+import * as colors from '../colors';
 import { log, logSingleLine, clearSingleLine } from '../logging';
 import DifferenceType from './difference_type';
 import DifferenceSet from './difference_set';
@@ -138,23 +139,23 @@ export default class ComparisonProgress {
     const foundEntries = [];
 
     if (sourceOnlyFileCount > 0) {
-      foundEntries.push(`${sourceOnlyFileCount} source-only files`);
+      foundEntries.push(`${colors.sourceOnly(sourceOnlyFileCount)} source-only files`);
     }
 
     if (sourceOnlyDirCount > 0) {
-      foundEntries.push(`${sourceOnlyDirCount} source-only dirs`);
-    }
-
-    if (targetOnlyFileCount > 0) {
-      foundEntries.push(`${targetOnlyFileCount} target-only files`);
-    }
-
-    if (targetOnlyDirCount > 0) {
-      foundEntries.push(`${targetOnlyDirCount} target-only dirs`);
+      foundEntries.push(`${colors.sourceOnly(sourceOnlyDirCount)} source-only dirs`);
     }
 
     if (differentFileCount > 0) {
-      foundEntries.push(`${differentFileCount} different files`);
+      foundEntries.push(`${colors.different(differentFileCount)} different files`);
+    }
+
+    if (targetOnlyFileCount > 0) {
+      foundEntries.push(`${colors.targetOnly(targetOnlyFileCount)} target-only files`);
+    }
+
+    if (targetOnlyDirCount > 0) {
+      foundEntries.push(`${colors.targetOnly(targetOnlyDirCount)} target-only dirs`);
     }
 
     if (foundEntries.length === 0) {
@@ -179,13 +180,13 @@ export default class ComparisonProgress {
   private formatDifferenceType(differenceType: DifferenceType) :string {
     switch (differenceType) {
       case DifferenceType.SOURCE_ONLY:
-        return 'source-only';
+        return colors.sourceOnly('source-only');
 
       case DifferenceType.TARGET_ONLY:
-        return 'target-only';
+        return colors.targetOnly('target-only');
 
       case DifferenceType.DIFFERENT:
-        return 'different  ';
+        return colors.different('different  ');
 
       default:
         return '';
