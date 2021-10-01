@@ -14,11 +14,11 @@ async function main(): Promise<void> {
   const { command, args } = parseCmdArgs();
 
   if (!command) {
-    throw new Error(`Command not set. Allowed commands: ${formattedAllowedCommands}.`);
+    throw new Error(`Command is not set. Allowed commands: ${formattedAllowedCommands}.`);
   }
 
   if (!allowedCommands.includes(command)) {
-    throw new Error(`Command "${command}" not found. Allowed commands: ${formattedAllowedCommands}.`);
+    throw new Error(`"${command}" is not a command. Allowed commands: ${formattedAllowedCommands}.`);
   }
 
   if (command === Commands.SHOW_HELP_MESSAGE) {
@@ -34,5 +34,5 @@ main()
   .catch((err) => {
     log();
     log(`Error: ${err.message}`);
-    log('Use "help" command to view help message.');
+    log('See "dir-diff help".');
   });
