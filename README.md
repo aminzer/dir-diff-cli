@@ -29,3 +29,9 @@ dir-diff compare --source "d:/work" --target "e:/backups/work"
 ```
 dir-diff help
 ```
+
+### Show version
+
+```
+dir-diff version
+```

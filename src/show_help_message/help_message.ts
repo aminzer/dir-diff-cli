@@ -15,4 +15,10 @@ const compareDirectoriesArgsDescription = CompareDirectoriesArgsDefinition
   }, '')
   .join('\n');
 
-export default `dir-diff ${Commands.COMPARE_DIRECTORIES} [args...]\n${compareDirectoriesArgsDescription}`;
+export default '\n'
+  + 'Compare directories:\n'
+  + `dir-diff ${Commands.COMPARE_DIRECTORIES} [args...]\n`
+  + `${compareDirectoriesArgsDescription}\n`
+  + '\n'
+  + 'Get version:\n'
+  + 'dir-diff version\n';
