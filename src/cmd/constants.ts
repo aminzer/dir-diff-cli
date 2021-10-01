@@ -1,6 +1,7 @@
 export enum Commands {
-  SHOW_HELP_MESSAGE = 'help',
   COMPARE_DIRECTORIES = 'compare',
+  SHOW_HELP_MESSAGE = 'help',
+  SHOW_VERSION = 'version',
 }
 
 export enum CompareDirectoriesArgs {

@@ -3,6 +3,7 @@
 import { parseCmdArgs, Commands } from './cmd';
 import { log } from './logging';
 import showHelpMessage from './show_help_message';
+import showVersion from './show_version';
 import compareDirectories from './compare_directories';
 
 const allowedCommands = Object.values(Commands);
@@ -23,6 +24,10 @@ async function main(): Promise<void> {
 
   if (command === Commands.SHOW_HELP_MESSAGE) {
     showHelpMessage();
+  }
+
+  if (command === Commands.SHOW_VERSION) {
+    showVersion();
   }
 
   if (command === Commands.COMPARE_DIRECTORIES) {
