@@ -51,4 +51,8 @@ export const CompareDirectoriesArgsDefinition: ArgDefinition[] = [{
   alias: 'X',
   type: Boolean,
   description: 'Children of source-only and target-only directories are not considered',
+}, {
+  name: CompareDirectoriesArgs.LOG_DIFFERENCE_SET_TO_CSV,
+  type: Boolean,
+  description: 'Directory difference is logged into CSV file',
 }];

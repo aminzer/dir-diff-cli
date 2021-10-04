@@ -3,15 +3,22 @@ import { padToSameWidth } from './utils';
 
 const compareDirectoriesFormattedArgNames = padToSameWidth(
   CompareDirectoriesArgsDefinition.map(({ name, valueDescription }) => (
-    valueDescription ? `${name}${valueDescription}` : name
+    valueDescription ? `--${name}${valueDescription}` : `--${name}`
+  )),
+);
+
+const compareDirectoriesFormattedArgAliases = padToSameWidth(
+  CompareDirectoriesArgsDefinition.map(({ alias }) => (
+    alias ? `(-${alias})` : ''
   )),
 );
 
 const compareDirectoriesArgsDescription = CompareDirectoriesArgsDefinition
-  .map(({ alias, description }, index) => {
+  .map(({ description }, index) => {
     const formattedName = compareDirectoriesFormattedArgNames[index];
+    const formattedAlias = compareDirectoriesFormattedArgAliases[index];
 
-    return `  --${formattedName} (-${alias}) - ${description.toLowerCase()}`;
+    return `  ${formattedName} ${formattedAlias} - ${description.toLowerCase()}`;
   }, '')
   .join('\n');
 

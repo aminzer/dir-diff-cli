@@ -78,6 +78,10 @@ export default class ComparisonProgress {
     });
   }
 
+  getDifferenceSet() : DifferenceSet {
+    return this.differenceSet;
+  }
+
   private startStatusLogging(): void {
     this.statusLoggingIntervalId = setInterval(this.logStatus.bind(this), this.statusLoggingDelay);
   }

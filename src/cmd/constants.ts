@@ -12,4 +12,5 @@ export enum CompareDirectoriesArgs {
   SKIP_DIFFERENT = 'skip-different',
   SKIP_CONTENT_COMPARISON = 'skip-content-comparison',
   SKIP_EXCESS_NESTED_ITERATIONS = 'skip-excess-nested-iterations',
+  LOG_DIFFERENCE_SET_TO_CSV = 'log-csv',
 }

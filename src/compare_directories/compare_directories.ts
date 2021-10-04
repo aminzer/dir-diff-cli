@@ -4,6 +4,7 @@ import { log } from '../logging';
 import logCmdArgs from './log_cmd_args';
 import ComparisonProgress from './comparison_progress';
 import DifferenceType from './difference_type';
+import { getCsvExportFilePath, exportToCsv } from './csv_export';
 
 const {
   SOURCE_DIR_PATH,
@@ -13,6 +14,7 @@ const {
   SKIP_DIFFERENT,
   SKIP_CONTENT_COMPARISON,
   SKIP_EXCESS_NESTED_ITERATIONS,
+  LOG_DIFFERENCE_SET_TO_CSV,
 } = CompareDirectoriesArgs;
 
 export default async function compareDirectories(args: CmdArgs): Promise<void> {
@@ -23,6 +25,7 @@ export default async function compareDirectories(args: CmdArgs): Promise<void> {
   const skipDifferent = args[SKIP_DIFFERENT] as boolean;
   const skipContentComparison = args[SKIP_CONTENT_COMPARISON] as boolean;
   const skipExcessNestedIterations = args[SKIP_EXCESS_NESTED_ITERATIONS] as boolean;
+  const logDifferenceSetToCsv = args[LOG_DIFFERENCE_SET_TO_CSV] as boolean;
 
   if (!sourceDirPath) {
     throw new Error(`Source directory is not set: [--${SOURCE_DIR_PATH} <path>]`);
@@ -70,7 +73,17 @@ export default async function compareDirectories(args: CmdArgs): Promise<void> {
 
   if (comparisonProgress.areDirectoriesEqual()) {
     log('Source and target directories have the same content.');
-  } else {
-    comparisonProgress.logDifferenceSet();
+    return;
+  }
+
+  comparisonProgress.logDifferenceSet();
+
+  if (logDifferenceSetToCsv) {
+    const csvFilePath = getCsvExportFilePath();
+
+    exportToCsv(comparisonProgress.getDifferenceSet(), csvFilePath);
+
+    log();
+    log(`Directory difference is exported to: "${csvFilePath}"`);
   }
 }
