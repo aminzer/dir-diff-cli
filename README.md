@@ -23,6 +23,7 @@ dir-diff compare --source "d:/work" --target "e:/backups/work"
 * --skip-different                (-D) - different files are not considered
 * --skip-content-comparison       (-C) - content comparison is skipped, files are compared by size only
 * --skip-excess-nested-iterations (-X) - children of source-only and target-only directories are not considered
+* --log-csv                            - directory difference is logged into csv file
 
 ### Show help message
 
