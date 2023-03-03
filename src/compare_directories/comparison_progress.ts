@@ -16,14 +16,14 @@ export default class ComparisonProgress {
     targetOnlyDirCount: number;
     differentFileCount: number;
   } = {
-    processedFileCount: 0,
-    processedDirCount: 0,
-    sourceOnlyFileCount: 0,
-    sourceOnlyDirCount: 0,
-    targetOnlyFileCount: 0,
-    targetOnlyDirCount: 0,
-    differentFileCount: 0,
-  };
+      processedFileCount: 0,
+      processedDirCount: 0,
+      sourceOnlyFileCount: 0,
+      sourceOnlyDirCount: 0,
+      targetOnlyFileCount: 0,
+      targetOnlyDirCount: 0,
+      differentFileCount: 0,
+    };
 
   private differenceSet: DifferenceSet = new DifferenceSet();
 
