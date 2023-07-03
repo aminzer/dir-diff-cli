@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@aminzer/dir-diff": "^4.0.12",
-    "chalk": "^5.3.0",
+    "chalk": "^4.1.2",
     "command-line-args": "^5.2.1",
     "single-line-log": "^1.1.2"
   },
