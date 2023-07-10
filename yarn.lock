@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz#bd9154aec9983f77b3a034ecaa015c2e4201f6cf"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
-"@aminzer/dir-diff@^4.0.12":
-  version "4.0.12"
-  resolved "https://registry.yarnpkg.com/@aminzer/dir-diff/-/dir-diff-4.0.12.tgz#fa26e265cbee55f5a27485e076d8bb084a60d271"
-  integrity sha512-jKezmPxQbuwHBiCHXv+DKzT3mxkcWVKjDXyoQi4E7FBB4foRVgrcAcV0tyO3e6gMGHMVTj2gQNcQttybGsnEZQ==
+"@aminzer/dir-diff@^4.0.13":
+  version "4.0.13"
+  resolved "https://registry.yarnpkg.com/@aminzer/dir-diff/-/dir-diff-4.0.13.tgz#4081eb765ad53e6bc34d1c5804657d2831230b01"
+  integrity sha512-3vdgM6qNKm+3aD0W1vg/H07mYevh+xHf6eZEFBzOXnk1USvG6phsxHpvCf5TGIqE3sfWSa08sFTabM5YaoSSIg==
   dependencies:
     stream-equal "^2.0.1"
 
