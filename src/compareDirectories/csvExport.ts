@@ -2,18 +2,14 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import { FsEntry } from '@aminzer/dir-diff';
-import DifferenceType from './difference_type';
-import DifferenceSet from './difference_set';
+import { DifferenceType } from '../constants';
+import { DifferenceSet } from '../models';
 
-function formatCsvCell(cellValue: string): string {
-  return `"${cellValue.replace(/"/g, '""')}"`;
-}
+const formatCsvCell = (cellValue: string): string => `"${cellValue.replace(/"/g, '""')}"`;
 
-function formatCsvRow(cellValues: string[]): string {
-  return `${cellValues.map(formatCsvCell).join(',')}\n`;
-}
+const formatCsvRow = (cellValues: string[]): string => `${cellValues.map(formatCsvCell).join(',')}\n`;
 
-function formatDifferenceType(differenceType: DifferenceType): string {
+const formatDifferenceType = (differenceType: DifferenceType): string => {
   switch (differenceType) {
     case DifferenceType.SOURCE_ONLY:
       return 'source-only';
@@ -27,19 +23,17 @@ function formatDifferenceType(differenceType: DifferenceType): string {
     default:
       return '';
   }
-}
+};
 
-function formatFsEntryType(fsEntry: FsEntry): string {
-  return fsEntry.isDirectory ? 'dir' : 'file';
-}
+const formatFsEntryType = (fsEntry: FsEntry): string => (fsEntry.isDirectory ? 'dir' : 'file');
 
-export function getCsvExportFilePath(): string {
+export const getCsvExportFilePath = (): string => {
   const fileName = `dir-diff-export-${Date.now()}.csv`;
 
   return path.join(os.homedir(), fileName);
-}
+};
 
-export function exportToCsv(differenceSet: DifferenceSet, outputFilePath: string): void {
+export const exportToCsv = (differenceSet: DifferenceSet, outputFilePath: string): void => {
   let csvFileContent = formatCsvRow([
     'Difference type',
     'Entry type',
@@ -63,4 +57,4 @@ export function exportToCsv(differenceSet: DifferenceSet, outputFilePath: string
   });
 
   fs.writeFileSync(outputFilePath, csvFileContent);
-}
+};

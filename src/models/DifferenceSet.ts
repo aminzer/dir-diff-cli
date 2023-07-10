@@ -1,11 +1,11 @@
 import { FsEntry } from '@aminzer/dir-diff';
-import DifferenceType from './difference_type';
+import { DifferenceType } from '../constants';
 
 type DifferenceSetStore = {
   [K in DifferenceType]: FsEntry[]
 };
 
-export default class DifferenceSet {
+class DifferenceSet {
   private store: DifferenceSetStore;
 
   constructor() {
@@ -28,3 +28,5 @@ export default class DifferenceSet {
     return [...Object.values(this.store)].flat().length === 0;
   }
 }
+
+export default DifferenceSet;

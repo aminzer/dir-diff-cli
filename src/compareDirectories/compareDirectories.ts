@@ -1,10 +1,10 @@
 import { compareDirectories as compareDirectoriesUtil, FsEntry } from '@aminzer/dir-diff';
 import { CompareDirectoriesArgs, CmdArgs } from '../cmd';
+import { DifferenceType } from '../constants';
 import { log } from '../logging';
-import logCmdArgs from './log_cmd_args';
-import ComparisonProgress from './comparison_progress';
-import DifferenceType from './difference_type';
-import { getCsvExportFilePath, exportToCsv } from './csv_export';
+import { ComparisonProgress } from '../models';
+import { getCsvExportFilePath, exportToCsv } from './csvExport';
+import logCmdArgs from './logCmdArgs';
 
 const {
   SOURCE_DIR_PATH,
@@ -17,7 +17,7 @@ const {
   LOG_DIFFERENCE_SET_TO_CSV,
 } = CompareDirectoriesArgs;
 
-export default async function compareDirectories(args: CmdArgs): Promise<void> {
+const compareDirectories = async (args: CmdArgs): Promise<void> => {
   const sourceDirPath = args[SOURCE_DIR_PATH] as string;
   const targetDirPath = args[TARGET_DIR_PATH] as string;
   const skipSourceOnly = args[SKIP_SOURCE_ONLY] as boolean;
@@ -86,4 +86,6 @@ export default async function compareDirectories(args: CmdArgs): Promise<void> {
     log();
     log(`Directory difference is exported to: "${csvFilePath}"`);
   }
-}
+};
+
+export default compareDirectories;

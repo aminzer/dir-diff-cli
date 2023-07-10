@@ -1,7 +1,7 @@
 import { CompareDirectoriesArgsDefinition, CmdArgs } from '../cmd';
 import { log } from '../logging';
 
-export default function logCmdArgs(args: CmdArgs): void {
+const logCmdArgs = (args: CmdArgs): void => {
   CompareDirectoriesArgsDefinition.forEach(({ name, type, description }) => {
     const value = args[name];
 
@@ -13,4 +13,6 @@ export default function logCmdArgs(args: CmdArgs): void {
       log(`! ${description} (--${name})`);
     }
   });
-}
+};
+
+export default logCmdArgs;

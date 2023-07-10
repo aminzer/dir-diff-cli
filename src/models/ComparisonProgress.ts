@@ -2,11 +2,11 @@
 
 import { FsEntry } from '@aminzer/dir-diff';
 import * as colors from '../colors';
+import { DifferenceType } from '../constants';
 import { log, logSingleLine, clearSingleLine } from '../logging';
-import DifferenceType from './difference_type';
-import DifferenceSet from './difference_set';
+import DifferenceSet from './DifferenceSet';
 
-export default class ComparisonProgress {
+class ComparisonProgress {
   private statistic: {
     processedFileCount: number;
     processedDirCount: number;
@@ -78,7 +78,7 @@ export default class ComparisonProgress {
     });
   }
 
-  getDifferenceSet() : DifferenceSet {
+  getDifferenceSet(): DifferenceSet {
     return this.differenceSet;
   }
 
@@ -181,7 +181,7 @@ export default class ComparisonProgress {
     log(`${formattedDifferenceType} | ${entryType} | ${entryPath}`);
   }
 
-  private formatDifferenceType(differenceType: DifferenceType) :string {
+  private formatDifferenceType(differenceType: DifferenceType): string {
     switch (differenceType) {
       case DifferenceType.SOURCE_ONLY:
         return colors.sourceOnly('source-only');
@@ -197,7 +197,9 @@ export default class ComparisonProgress {
     }
   }
 
-  private formatFsEntryType(fsEntry : FsEntry): string {
+  private formatFsEntryType(fsEntry: FsEntry): string {
     return fsEntry.isDirectory ? 'dir' : '   ';
   }
 }
+
+export default ComparisonProgress;
