@@ -1,5 +1,5 @@
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 
 export const sourceOnly = chalk.green;
 export const targetOnly = chalk.red;
-export const different = chalk.blue;
+export const different = chalk.yellow;

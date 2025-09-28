@@ -7,7 +7,8 @@ import { DifferenceSet } from '../models';
 
 const formatCsvCell = (cellValue: string): string => `"${cellValue.replace(/"/g, '""')}"`;
 
-const formatCsvRow = (cellValues: string[]): string => `${cellValues.map(formatCsvCell).join(',')}\n`;
+const formatCsvRow = (cellValues: string[]): string =>
+  `${cellValues.map(formatCsvCell).join(',')}\n`;
 
 const formatDifferenceType = (differenceType: DifferenceType): string => {
   switch (differenceType) {
@@ -41,20 +42,18 @@ export const exportToCsv = (differenceSet: DifferenceSet, outputFilePath: string
     'Absolute entry path',
   ]);
 
-  [
-    DifferenceType.SOURCE_ONLY,
-    DifferenceType.DIFFERENT,
-    DifferenceType.TARGET_ONLY,
-  ].forEach((differenceType) => {
-    differenceSet.getAll(differenceType).forEach((fsEntry) => {
-      csvFileContent += formatCsvRow([
-        formatDifferenceType(differenceType),
-        formatFsEntryType(fsEntry),
-        fsEntry.relativePath,
-        fsEntry.absolutePath,
-      ]);
-    });
-  });
+  [DifferenceType.SOURCE_ONLY, DifferenceType.DIFFERENT, DifferenceType.TARGET_ONLY].forEach(
+    (differenceType) => {
+      differenceSet.getAll(differenceType).forEach((fsEntry) => {
+        csvFileContent += formatCsvRow([
+          formatDifferenceType(differenceType),
+          formatFsEntryType(fsEntry),
+          fsEntry.relativePath,
+          fsEntry.absolutePath,
+        ]);
+      });
+    },
+  );
 
   fs.writeFileSync(outputFilePath, csvFileContent);
 };

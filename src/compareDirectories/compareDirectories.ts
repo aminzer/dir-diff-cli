@@ -41,15 +41,21 @@ const compareDirectories = async (args: CmdArgs): Promise<void> => {
   const comparisonProgress = new ComparisonProgress();
 
   const compareDirectoriesOpts = {
-    onSourceOnlyEntry: skipSourceOnly ? null : (fsEntry: FsEntry) => {
-      comparisonProgress.considerFsEntry(fsEntry, DifferenceType.SOURCE_ONLY);
-    },
-    onTargetOnlyEntry: skipTargetOnly ? null : (fsEntry: FsEntry) => {
-      comparisonProgress.considerFsEntry(fsEntry, DifferenceType.TARGET_ONLY);
-    },
-    onDifferentEntries: skipDifferent ? null : (fsEntry: FsEntry) => {
-      comparisonProgress.considerFsEntry(fsEntry, DifferenceType.DIFFERENT);
-    },
+    onSourceOnlyEntry: skipSourceOnly
+      ? undefined
+      : (fsEntry: FsEntry) => {
+          comparisonProgress.considerFsEntry(fsEntry, DifferenceType.SOURCE_ONLY);
+        },
+    onTargetOnlyEntry: skipTargetOnly
+      ? undefined
+      : (fsEntry: FsEntry) => {
+          comparisonProgress.considerFsEntry(fsEntry, DifferenceType.TARGET_ONLY);
+        },
+    onDifferentEntries: skipDifferent
+      ? undefined
+      : (fsEntry: FsEntry) => {
+          comparisonProgress.considerFsEntry(fsEntry, DifferenceType.DIFFERENT);
+        },
     onEachEntry: (fsEntry: FsEntry) => {
       comparisonProgress.considerFsEntry(fsEntry);
     },

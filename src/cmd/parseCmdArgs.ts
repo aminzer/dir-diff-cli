@@ -1,9 +1,9 @@
-import * as commandLineArgs from 'command-line-args';
+import commandLineArgs from 'command-line-args';
 import { CommandArgDefinition, CompareDirectoriesArgsDefinition } from './argsDefinitions';
 import { Commands } from './constants';
 import { CmdArgs } from './types';
 
-const parseCmdArgs = (): { command: Commands, args: CmdArgs } => {
+const parseCmdArgs = (): { command: Commands; args: CmdArgs } => {
   let args = {};
 
   const { command, _unknown: restArgs = [] } = commandLineArgs(CommandArgDefinition, {

@@ -2,6 +2,10 @@
   "name": "@aminzer/dir-diff-cli",
   "version": "2.2.14",
   "description": "Command line tool for recursive directory comparison",
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
   "keywords": [
     "directory",
     "folder",
@@ -24,32 +28,38 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --project tsconfig.json",
+    "build": "tsc --project tsconfig.build.json",
     "build:watch": "npm run build -- --watch",
-    "husky:prepare": "husky install",
+    "clean": "rimraf dist",
+    "codestyle": "run-p lint typescript:check",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "npm run lint -- --fix",
-    "prepare": "run-s husky:prepare build"
+    "prepare": "npm run rebuild",
+    "rebuild": "run-s clean build",
+    "typescript:check": "tsc --project tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@aminzer/dir-diff": "^4.0.13",
-    "chalk": "^4.1.2",
+    "@aminzer/dir-diff": "^5.0.0",
+    "chalk": "^5.6.2",
     "command-line-args": "^5.2.1",
     "single-line-log": "^1.1.2"
   },
   "devDependencies": {
-    "@types/node": "^20.3.3",
-    "@typescript-eslint/eslint-plugin": "^5.61.0",
-    "@typescript-eslint/parser": "^5.61.0",
-    "eslint": "^8.44.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-plugin-import": "^2.27.5",
-    "husky": "^8.0.3",
+    "@eslint/js": "^9.36.0",
+    "@types/command-line-args": "^5.2.1",
+    "@types/node": "^24.5.2",
+    "@types/single-line-log": "^1.1.2",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "npm-run-all": "^4.1.5",
-    "typescript": "^5.1.6"
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.1"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=22.0.0"
   }
 }

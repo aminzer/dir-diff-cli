@@ -7,9 +7,7 @@ import showHelpMessage from './showHelpMessage';
 import showVersion from './showVersion';
 
 const allowedCommands = Object.values(Commands);
-const formattedAllowedCommands = allowedCommands
-  .map((c) => `"${c}"`)
-  .join(', ');
+const formattedAllowedCommands = allowedCommands.map((c) => `"${c}"`).join(', ');
 
 const main = async (): Promise<void> => {
   const { command, args } = parseCmdArgs();
@@ -19,7 +17,9 @@ const main = async (): Promise<void> => {
   }
 
   if (!allowedCommands.includes(command)) {
-    throw new Error(`"${command}" is not a command. Allowed commands: ${formattedAllowedCommands}.`);
+    throw new Error(
+      `"${command}" is not a command. Allowed commands: ${formattedAllowedCommands}.`,
+    );
   }
 
   if (command === Commands.SHOW_HELP_MESSAGE) {
@@ -35,9 +35,8 @@ const main = async (): Promise<void> => {
   }
 };
 
-main()
-  .catch((err) => {
-    log();
-    log(`Error: ${err.message}`);
-    log('See "dir-diff help".');
-  });
+main().catch((err) => {
+  log();
+  log(`Error: ${err.message}`);
+  log('See "dir-diff help".');
+});

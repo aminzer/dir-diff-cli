@@ -2,7 +2,7 @@ import { FsEntry } from '@aminzer/dir-diff';
 import { DifferenceType } from '../constants';
 
 type DifferenceSetStore = {
-  [K in DifferenceType]: FsEntry[]
+  [K in DifferenceType]: FsEntry[];
 };
 
 class DifferenceSet {

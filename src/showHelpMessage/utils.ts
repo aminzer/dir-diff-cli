@@ -4,7 +4,6 @@ const getMaxLength = (strings: string[]): number => {
   return Math.max(...stringLengths);
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const padToSameWidth = (strings: string[]): string[] => {
   const maxLength = getMaxLength(strings);
 

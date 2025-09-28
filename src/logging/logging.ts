@@ -1,5 +1,5 @@
-import { stdout as singleLineLog } from 'single-line-log';
+import { stdout } from 'single-line-log';
 
 export const { log } = console;
-export const logSingleLine = singleLineLog;
-export const clearSingleLine = singleLineLog.clear;
+export const logSingleLine = stdout;
+export const clearSingleLine = stdout.clear;

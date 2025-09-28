@@ -1,39 +1,30 @@
-/* eslint-disable class-methods-use-this */
-
 import { FsEntry } from '@aminzer/dir-diff';
 import * as colors from '../colors';
 import { DifferenceType } from '../constants';
 import { log, logSingleLine, clearSingleLine } from '../logging';
+import { StatisticKey } from '../types';
 import DifferenceSet from './DifferenceSet';
 
 class ComparisonProgress {
-  private statistic: {
-    processedFileCount: number;
-    processedDirCount: number;
-    sourceOnlyFileCount: number;
-    sourceOnlyDirCount: number;
-    targetOnlyFileCount: number;
-    targetOnlyDirCount: number;
-    differentFileCount: number;
-  } = {
-      processedFileCount: 0,
-      processedDirCount: 0,
-      sourceOnlyFileCount: 0,
-      sourceOnlyDirCount: 0,
-      targetOnlyFileCount: 0,
-      targetOnlyDirCount: 0,
-      differentFileCount: 0,
-    };
+  private statistic: Record<StatisticKey, number> = {
+    processedFileCount: 0,
+    processedDirCount: 0,
+    sourceOnlyFileCount: 0,
+    sourceOnlyDirCount: 0,
+    targetOnlyFileCount: 0,
+    targetOnlyDirCount: 0,
+    differentFileCount: 0,
+  };
 
   private differenceSet: DifferenceSet = new DifferenceSet();
 
-  private inProgress: boolean;
+  private inProgress: boolean = false;
 
-  private statusLoggingIntervalId: any;
+  private statusLoggingIntervalId: NodeJS.Timeout | undefined;
 
   private statusLoggingDelay: number = 200;
 
-  private processingFsEntry: FsEntry;
+  private processingFsEntry: FsEntry | null = null;
 
   start(): void {
     this.inProgress = true;
@@ -67,15 +58,13 @@ class ComparisonProgress {
   }
 
   logDifferenceSet(): void {
-    [
-      DifferenceType.SOURCE_ONLY,
-      DifferenceType.DIFFERENT,
-      DifferenceType.TARGET_ONLY,
-    ].forEach((differenceType) => {
-      this.differenceSet.getAll(differenceType).forEach((fsEntry) => {
-        this.logFsEntry(fsEntry, differenceType);
-      });
-    });
+    [DifferenceType.SOURCE_ONLY, DifferenceType.DIFFERENT, DifferenceType.TARGET_ONLY].forEach(
+      (differenceType) => {
+        this.differenceSet.getAll(differenceType).forEach((fsEntry) => {
+          this.logFsEntry(fsEntry, differenceType);
+        });
+      },
+    );
   }
 
   getDifferenceSet(): DifferenceSet {
@@ -90,7 +79,7 @@ class ComparisonProgress {
     clearInterval(this.statusLoggingIntervalId);
   }
 
-  private getStatisticKey(fsEntry: FsEntry, differenceType: DifferenceType): string {
+  private getStatisticKey(fsEntry: FsEntry, differenceType?: DifferenceType): StatisticKey {
     switch (differenceType) {
       case DifferenceType.SOURCE_ONLY:
         return fsEntry.isFile ? 'sourceOnlyFileCount' : 'sourceOnlyDirCount';
@@ -115,10 +104,12 @@ class ComparisonProgress {
   }
 
   private get status(): string {
-    return this.comparisonProcessStatus
-      + this.processedStatus
-      + this.comparisonStatus
-      + this.processingStatus;
+    return (
+      this.comparisonProcessStatus +
+      this.processedStatus +
+      this.comparisonStatus +
+      this.processingStatus
+    );
   }
 
   private get comparisonProcessStatus(): string {
@@ -170,7 +161,9 @@ class ComparisonProgress {
   }
 
   private get processingStatus(): string {
-    return this.inProgress && this.processingFsEntry ? `\nProcessing: "${this.processingFsEntry.absolutePath}"` : '';
+    return this.inProgress && this.processingFsEntry
+      ? `\nProcessing: "${this.processingFsEntry.absolutePath}"`
+      : '';
   }
 
   private logFsEntry(fsEntry: FsEntry, differenceType: DifferenceType): void {
