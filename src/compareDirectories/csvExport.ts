@@ -1,9 +1,9 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import * as os from 'os';
+import { writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { homedir } from 'node:os';
 import { FsEntry } from '@aminzer/dir-diff';
-import { DifferenceType } from '../constants';
-import { DifferenceSet } from '../models';
+import { DifferenceType } from '../constants/index.js';
+import { DifferenceSet } from '../models/index.js';
 
 const formatCsvCell = (cellValue: string): string => `"${cellValue.replace(/"/g, '""')}"`;
 
@@ -31,7 +31,7 @@ const formatFsEntryType = (fsEntry: FsEntry): string => (fsEntry.isDirectory ? '
 export const getCsvExportFilePath = (): string => {
   const fileName = `dir-diff-export-${Date.now()}.csv`;
 
-  return path.join(os.homedir(), fileName);
+  return join(homedir(), fileName);
 };
 
 export const exportToCsv = (differenceSet: DifferenceSet, outputFilePath: string): void => {
@@ -55,5 +55,5 @@ export const exportToCsv = (differenceSet: DifferenceSet, outputFilePath: string
     },
   );
 
-  fs.writeFileSync(outputFilePath, csvFileContent);
+  writeFileSync(outputFilePath, csvFileContent);
 };

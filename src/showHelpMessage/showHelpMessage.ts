@@ -1,5 +1,5 @@
-import { log } from '../logging';
-import helpMessage from './helpMessage';
+import { log } from '../logging/index.js';
+import helpMessage from './helpMessage.js';
 
 const showHelpMessage = (): void => {
   log(helpMessage);

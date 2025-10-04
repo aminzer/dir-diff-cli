@@ -1,7 +1,7 @@
 import commandLineArgs from 'command-line-args';
-import { CommandArgDefinition, CompareDirectoriesArgsDefinition } from './argsDefinitions';
-import { Commands } from './constants';
-import { CmdArgs } from './types';
+import { CommandArgDefinition, CompareDirectoriesArgsDefinition } from './argsDefinitions.js';
+import { Commands } from './constants.js';
+import { CmdArgs } from './types.js';
 
 const parseCmdArgs = (): { command: Commands; args: CmdArgs } => {
   let args = {};

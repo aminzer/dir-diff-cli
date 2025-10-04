@@ -1,1 +1,1 @@
-export { default as DifferenceType } from './DifferenceType';
+export { default as DifferenceType } from './DifferenceType.js';

@@ -1,4 +1,4 @@
-export { default as parseCmdArgs } from './parseCmdArgs';
-export { Commands, CompareDirectoriesArgs } from './constants';
-export { CompareDirectoriesArgsDefinition } from './argsDefinitions';
-export type { CmdArgs } from './types';
+export { default as parseCmdArgs } from './parseCmdArgs.js';
+export { Commands, CompareDirectoriesArgs } from './constants.js';
+export { CompareDirectoriesArgsDefinition } from './argsDefinitions.js';
+export type { CmdArgs } from './types.js';

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import { parseCmdArgs, Commands } from './cmd';
-import compareDirectories from './compareDirectories';
-import { log } from './logging';
-import showHelpMessage from './showHelpMessage';
-import showVersion from './showVersion';
+import { parseCmdArgs, Commands } from './cmd/index.js';
+import compareDirectories from './compareDirectories/index.js';
+import { log } from './logging/index.js';
+import showHelpMessage from './showHelpMessage/index.js';
+import showVersion from './showVersion/index.js';
 
 const allowedCommands = Object.values(Commands);
 const formattedAllowedCommands = allowedCommands.map((c) => `"${c}"`).join(', ');

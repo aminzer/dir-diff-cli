@@ -1,5 +1,5 @@
 import { FsEntry } from '@aminzer/dir-diff';
-import { DifferenceType } from '../constants';
+import { DifferenceType } from '../constants/index.js';
 
 type DifferenceSetStore = {
   [K in DifferenceType]: FsEntry[];

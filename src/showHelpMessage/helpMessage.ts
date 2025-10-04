@@ -1,5 +1,5 @@
-import { Commands, CompareDirectoriesArgsDefinition } from '../cmd';
-import { padToSameWidth } from './utils';
+import { Commands, CompareDirectoriesArgsDefinition } from '../cmd/index.js';
+import { padToSameWidth } from './utils.js';
 
 const compareDirectoriesFormattedArgNames = padToSameWidth(
   CompareDirectoriesArgsDefinition.map(({ name, valueDescription }) =>

@@ -1,5 +1,5 @@
-import { log } from '../logging';
-import getPackageVersion from './getPackageVersion';
+import { log } from '../logging/index.js';
+import getPackageVersion from './getPackageVersion.js';
 
 const showVersion = (): void => {
   log(`v${getPackageVersion()}`);

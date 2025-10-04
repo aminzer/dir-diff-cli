@@ -1,10 +1,10 @@
 import { compareDirectories as compareDirectoriesUtil, FsEntry } from '@aminzer/dir-diff';
-import { CompareDirectoriesArgs, CmdArgs } from '../cmd';
-import { DifferenceType } from '../constants';
-import { log } from '../logging';
-import { ComparisonProgress } from '../models';
-import { getCsvExportFilePath, exportToCsv } from './csvExport';
-import logCmdArgs from './logCmdArgs';
+import { CompareDirectoriesArgs, CmdArgs } from '../cmd/index.js';
+import { DifferenceType } from '../constants/index.js';
+import { log } from '../logging/index.js';
+import { ComparisonProgress } from '../models/index.js';
+import { getCsvExportFilePath, exportToCsv } from './csvExport.js';
+import logCmdArgs from './logCmdArgs.js';
 
 const {
   SOURCE_DIR_PATH,

@@ -1,5 +1,5 @@
-import { CompareDirectoriesArgsDefinition, CmdArgs } from '../cmd';
-import { log } from '../logging';
+import { CompareDirectoriesArgsDefinition, CmdArgs } from '../cmd/index.js';
+import { log } from '../logging/index.js';
 
 const logCmdArgs = (args: CmdArgs): void => {
   CompareDirectoriesArgsDefinition.forEach(({ name, type, description }) => {

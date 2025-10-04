@@ -1,9 +1,9 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 const getPackageVersion = (): string => {
-  const packageJsonFilePath = path.resolve(import.meta.dirname, '../../package.json');
-  const packageJsonFileContent = fs.readFileSync(packageJsonFilePath, 'utf-8');
+  const packageJsonFilePath = resolve(import.meta.dirname, '../../package.json');
+  const packageJsonFileContent = readFileSync(packageJsonFilePath, 'utf-8');
 
   const { version } = JSON.parse(packageJsonFileContent);
 

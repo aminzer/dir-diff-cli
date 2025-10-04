@@ -1,9 +1,9 @@
 import { FsEntry } from '@aminzer/dir-diff';
-import * as colors from '../colors';
-import { DifferenceType } from '../constants';
-import { log, logSingleLine, clearSingleLine } from '../logging';
-import { StatisticKey } from '../types';
-import DifferenceSet from './DifferenceSet';
+import * as colors from '../colors/index.js';
+import { DifferenceType } from '../constants/index.js';
+import { log, logSingleLine, clearSingleLine } from '../logging/index.js';
+import { StatisticKey } from '../types.js';
+import DifferenceSet from './DifferenceSet.js';
 
 class ComparisonProgress {
   private statistic: Record<StatisticKey, number> = {

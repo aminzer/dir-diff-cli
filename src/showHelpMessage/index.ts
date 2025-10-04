@@ -1,1 +1,1 @@
-export { default } from './showHelpMessage';
+export { default } from './showHelpMessage.js';

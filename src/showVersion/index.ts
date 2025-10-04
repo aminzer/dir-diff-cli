@@ -1,1 +1,1 @@
-export { default } from './showVersion';
+export { default } from './showVersion.js';

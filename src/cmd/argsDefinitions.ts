@@ -1,5 +1,5 @@
 import { OptionDefinition } from 'command-line-args';
-import { CompareDirectoriesArgs } from './constants';
+import { CompareDirectoriesArgs } from './constants.js';
 
 export const CommandArgDefinition: OptionDefinition[] = [
   {

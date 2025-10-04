@@ -1,2 +1,2 @@
-export { default as ComparisonProgress } from './ComparisonProgress';
-export { default as DifferenceSet } from './DifferenceSet';
+export { default as ComparisonProgress } from './ComparisonProgress.js';
+export { default as DifferenceSet } from './DifferenceSet.js';
