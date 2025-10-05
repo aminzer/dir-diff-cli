@@ -28,8 +28,25 @@ const formatDifferenceType = (differenceType: DifferenceType): string => {
 
 const formatFsEntryType = (fsEntry: FsEntry): string => (fsEntry.isDirectory ? 'dir' : 'file');
 
+const formatDate = (date: Date): string => {
+  const pad = (n: number, width = 2) => n.toString().padStart(width, '0');
+
+  return (
+    date.getFullYear().toString() +
+    pad(date.getMonth() + 1) +
+    pad(date.getDate()) +
+    '_' +
+    pad(date.getHours()) +
+    pad(date.getMinutes()) +
+    pad(date.getSeconds()) +
+    pad(date.getMilliseconds(), 3)
+  );
+};
+
 export const getCsvExportFilePath = (): string => {
-  const fileName = `dir-diff-export-${Date.now()}.csv`;
+  const currentDate = new Date(Date.now());
+
+  const fileName = `dir_diff_export_${formatDate(currentDate)}.csv`;
 
   return join(homedir(), fileName);
 };
