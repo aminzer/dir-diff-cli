@@ -400,7 +400,7 @@ describe('compare', () => {
       const mockedDate = new Date('2025-10-05 12:34:56.789');
       let originalDateNow: typeof Date.now;
 
-      const expectedCsvFilePath = join(homedir(), 'dir_diff_export_20251005_123456789.csv');
+      const expectedCsvFilePath = join(homedir(), 'dir_diff_20251005_123456789.csv');
 
       beforeEach(async () => {
         originalDateNow = Date.now;

@@ -46,7 +46,7 @@ const formatDate = (date: Date): string => {
 export const getCsvExportFilePath = (): string => {
   const currentDate = new Date(Date.now());
 
-  const fileName = `dir_diff_export_${formatDate(currentDate)}.csv`;
+  const fileName = `dir_diff_${formatDate(currentDate)}.csv`;
 
   return join(homedir(), fileName);
 };
