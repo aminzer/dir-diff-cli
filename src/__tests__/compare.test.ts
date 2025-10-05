@@ -474,18 +474,18 @@ describe('compare', () => {
             `"source-only","file","file1_added.txt","${root}${sep}source${sep}file1_added.txt"\n` +
             `"source-only","file","file2_added.txt","${root}${sep}source${sep}file2_added.txt"\n` +
             `"source-only","dir","subdir1_added","${root}${sep}source${sep}subdir1_added"\n` +
-            `"source-only","file","subdir1_added\\file11_added.txt","${root}${sep}source${sep}subdir1_added${sep}file11_added.txt"\n` +
-            `"source-only","file","subdir2\\file22_added.txt","${root}${sep}source${sep}subdir2${sep}file22_added.txt"\n` +
-            `"source-only","file","subdir2\\subdir21\\file212_added.txt","${root}${sep}source${sep}subdir2${sep}subdir21${sep}file212_added.txt"\n` +
-            `"source-only","dir","subdir2\\subdir22_added","${root}${sep}source${sep}subdir2${sep}subdir22_added"\n` +
-            `"source-only","file","subdir2\\subdir22_added\\file221_added.txt","${root}${sep}source${sep}subdir2${sep}subdir22_added${sep}file221_added.txt"\n` +
+            `"source-only","file","subdir1_added${sep}file11_added.txt","${root}${sep}source${sep}subdir1_added${sep}file11_added.txt"\n` +
+            `"source-only","file","subdir2${sep}file22_added.txt","${root}${sep}source${sep}subdir2${sep}file22_added.txt"\n` +
+            `"source-only","file","subdir2${sep}subdir21${sep}file212_added.txt","${root}${sep}source${sep}subdir2${sep}subdir21${sep}file212_added.txt"\n` +
+            `"source-only","dir","subdir2${sep}subdir22_added","${root}${sep}source${sep}subdir2${sep}subdir22_added"\n` +
+            `"source-only","file","subdir2${sep}subdir22_added${sep}file221_added.txt","${root}${sep}source${sep}subdir2${sep}subdir22_added${sep}file221_added.txt"\n` +
             `"different","file","file5_modified_content.txt","${root}${sep}source${sep}file5_modified_content.txt"\n` +
-            `"different","file","subdir2\\file23_modified_size.txt","${root}${sep}source${sep}subdir2${sep}file23_modified_size.txt"\n` +
-            `"different","file","subdir2\\subdir21\\file213_modified_content.txt","${root}${sep}source${sep}subdir2${sep}subdir21${sep}file213_modified_content.txt"\n` +
+            `"different","file","subdir2${sep}file23_modified_size.txt","${root}${sep}source${sep}subdir2${sep}file23_modified_size.txt"\n` +
+            `"different","file","subdir2${sep}subdir21${sep}file213_modified_content.txt","${root}${sep}source${sep}subdir2${sep}subdir21${sep}file213_modified_content.txt"\n` +
             `"target-only","file","file6_removed.txt","${root}${sep}target${sep}file6_removed.txt"\n` +
-            `"target-only","file","subdir2\\file24_removed.txt","${root}${sep}target${sep}subdir2${sep}file24_removed.txt"\n` +
+            `"target-only","file","subdir2${sep}file24_removed.txt","${root}${sep}target${sep}subdir2${sep}file24_removed.txt"\n` +
             `"target-only","dir","subdir3_removed","${root}${sep}target${sep}subdir3_removed"\n` +
-            `"target-only","file","subdir3_removed\\file31_removed.txt","${root}${sep}target${sep}subdir3_removed${sep}file31_removed.txt"\n`,
+            `"target-only","file","subdir3_removed${sep}file31_removed.txt","${root}${sep}target${sep}subdir3_removed${sep}file31_removed.txt"\n`,
         );
       });
     });
