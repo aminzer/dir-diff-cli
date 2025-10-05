@@ -1,5 +1,5 @@
 import assert from 'node:assert';
-import { join } from 'node:path';
+import { join, sep } from 'node:path';
 import { beforeEach, describe, it } from 'node:test';
 import main from '../main.js';
 import InMemoryLogger from './InMemoryLogger.js';
@@ -104,7 +104,7 @@ describe('compare', () => {
     const sourceDirPath = join(import.meta.dirname, '../../test/resources/common/source');
     const targetDirPath = join(import.meta.dirname, '../../test/resources/common/target');
 
-    describe('when no additional options are passed', () => {
+    describe('when no additional arguments are passed', () => {
       beforeEach(async () => {
         process.argv = [
           'node',
@@ -130,18 +130,18 @@ describe('compare', () => {
           `${green_start}source-only${green_end} |     | file1_added.txt`,
           `${green_start}source-only${green_end} |     | file2_added.txt`,
           `${green_start}source-only${green_end} | dir | subdir1_added`,
-          `${green_start}source-only${green_end} |     | subdir1_added\\file11_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2\\file22_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2\\subdir21\\file212_added.txt`,
-          `${green_start}source-only${green_end} | dir | subdir2\\subdir22_added`,
-          `${green_start}source-only${green_end} |     | subdir2\\subdir22_added\\file221_added.txt`,
+          `${green_start}source-only${green_end} |     | subdir1_added${sep}file11_added.txt`,
+          `${green_start}source-only${green_end} |     | subdir2${sep}file22_added.txt`,
+          `${green_start}source-only${green_end} |     | subdir2${sep}subdir21${sep}file212_added.txt`,
+          `${green_start}source-only${green_end} | dir | subdir2${sep}subdir22_added`,
+          `${green_start}source-only${green_end} |     | subdir2${sep}subdir22_added${sep}file221_added.txt`,
           `${yellow_start}different  ${yellow_end} |     | file5_modified_content.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2\\file23_modified_size.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2\\subdir21\\file213_modified_content.txt`,
+          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}file23_modified_size.txt`,
+          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}subdir21${sep}file213_modified_content.txt`,
           `${red_start}target-only${red_end} |     | file6_removed.txt`,
-          `${red_start}target-only${red_end} |     | subdir2\\file24_removed.txt`,
+          `${red_start}target-only${red_end} |     | subdir2${sep}file24_removed.txt`,
           `${red_start}target-only${red_end} | dir | subdir3_removed`,
-          `${red_start}target-only${red_end} |     | subdir3_removed\\file31_removed.txt`,
+          `${red_start}target-only${red_end} |     | subdir3_removed${sep}file31_removed.txt`,
         ]);
       });
 
@@ -154,7 +154,7 @@ describe('compare', () => {
       });
     });
 
-    describe('when "--skip-source-only" flag is passed', () => {
+    describe('when "--skip-source-only" argument is passed', () => {
       beforeEach(async () => {
         process.argv = [
           'node',
@@ -179,12 +179,12 @@ describe('compare', () => {
           '',
           '',
           `${yellow_start}different  ${yellow_end} |     | file5_modified_content.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2\\file23_modified_size.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2\\subdir21\\file213_modified_content.txt`,
+          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}file23_modified_size.txt`,
+          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}subdir21${sep}file213_modified_content.txt`,
           `${red_start}target-only${red_end} |     | file6_removed.txt`,
-          `${red_start}target-only${red_end} |     | subdir2\\file24_removed.txt`,
+          `${red_start}target-only${red_end} |     | subdir2${sep}file24_removed.txt`,
           `${red_start}target-only${red_end} | dir | subdir3_removed`,
-          `${red_start}target-only${red_end} |     | subdir3_removed\\file31_removed.txt`,
+          `${red_start}target-only${red_end} |     | subdir3_removed${sep}file31_removed.txt`,
         ]);
       });
 
@@ -197,7 +197,7 @@ describe('compare', () => {
       });
     });
 
-    describe('when "--skip-target-only" flag is passed', () => {
+    describe('when "--skip-target-only" argument is passed', () => {
       beforeEach(async () => {
         process.argv = [
           'node',
@@ -225,14 +225,14 @@ describe('compare', () => {
           `${green_start}source-only${green_end} |     | file1_added.txt`,
           `${green_start}source-only${green_end} |     | file2_added.txt`,
           `${green_start}source-only${green_end} | dir | subdir1_added`,
-          `${green_start}source-only${green_end} |     | subdir1_added\\file11_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2\\file22_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2\\subdir21\\file212_added.txt`,
-          `${green_start}source-only${green_end} | dir | subdir2\\subdir22_added`,
-          `${green_start}source-only${green_end} |     | subdir2\\subdir22_added\\file221_added.txt`,
+          `${green_start}source-only${green_end} |     | subdir1_added${sep}file11_added.txt`,
+          `${green_start}source-only${green_end} |     | subdir2${sep}file22_added.txt`,
+          `${green_start}source-only${green_end} |     | subdir2${sep}subdir21${sep}file212_added.txt`,
+          `${green_start}source-only${green_end} | dir | subdir2${sep}subdir22_added`,
+          `${green_start}source-only${green_end} |     | subdir2${sep}subdir22_added${sep}file221_added.txt`,
           `${yellow_start}different  ${yellow_end} |     | file5_modified_content.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2\\file23_modified_size.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2\\subdir21\\file213_modified_content.txt`,
+          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}file23_modified_size.txt`,
+          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}subdir21${sep}file213_modified_content.txt`,
         ]);
       });
 
@@ -245,7 +245,7 @@ describe('compare', () => {
       });
     });
 
-    describe('when "--skip-different" flag is passed', () => {
+    describe('when "--skip-different" argument is passed', () => {
       beforeEach(async () => {
         process.argv = [
           'node',
@@ -273,15 +273,15 @@ describe('compare', () => {
           `${green_start}source-only${green_end} |     | file1_added.txt`,
           `${green_start}source-only${green_end} |     | file2_added.txt`,
           `${green_start}source-only${green_end} | dir | subdir1_added`,
-          `${green_start}source-only${green_end} |     | subdir1_added\\file11_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2\\file22_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2\\subdir21\\file212_added.txt`,
-          `${green_start}source-only${green_end} | dir | subdir2\\subdir22_added`,
-          `${green_start}source-only${green_end} |     | subdir2\\subdir22_added\\file221_added.txt`,
+          `${green_start}source-only${green_end} |     | subdir1_added${sep}file11_added.txt`,
+          `${green_start}source-only${green_end} |     | subdir2${sep}file22_added.txt`,
+          `${green_start}source-only${green_end} |     | subdir2${sep}subdir21${sep}file212_added.txt`,
+          `${green_start}source-only${green_end} | dir | subdir2${sep}subdir22_added`,
+          `${green_start}source-only${green_end} |     | subdir2${sep}subdir22_added${sep}file221_added.txt`,
           `${red_start}target-only${red_end} |     | file6_removed.txt`,
-          `${red_start}target-only${red_end} |     | subdir2\\file24_removed.txt`,
+          `${red_start}target-only${red_end} |     | subdir2${sep}file24_removed.txt`,
           `${red_start}target-only${red_end} | dir | subdir3_removed`,
-          `${red_start}target-only${red_end} |     | subdir3_removed\\file31_removed.txt`,
+          `${red_start}target-only${red_end} |     | subdir3_removed${sep}file31_removed.txt`,
         ]);
       });
 
@@ -294,7 +294,7 @@ describe('compare', () => {
       });
     });
 
-    describe('when "--skip-content-comparison" flag is passed', () => {
+    describe('when "--skip-content-comparison" argument is passed', () => {
       beforeEach(async () => {
         process.argv = [
           'node',
@@ -322,16 +322,16 @@ describe('compare', () => {
           `${green_start}source-only${green_end} |     | file1_added.txt`,
           `${green_start}source-only${green_end} |     | file2_added.txt`,
           `${green_start}source-only${green_end} | dir | subdir1_added`,
-          `${green_start}source-only${green_end} |     | subdir1_added\\file11_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2\\file22_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2\\subdir21\\file212_added.txt`,
-          `${green_start}source-only${green_end} | dir | subdir2\\subdir22_added`,
-          `${green_start}source-only${green_end} |     | subdir2\\subdir22_added\\file221_added.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2\\file23_modified_size.txt`,
+          `${green_start}source-only${green_end} |     | subdir1_added${sep}file11_added.txt`,
+          `${green_start}source-only${green_end} |     | subdir2${sep}file22_added.txt`,
+          `${green_start}source-only${green_end} |     | subdir2${sep}subdir21${sep}file212_added.txt`,
+          `${green_start}source-only${green_end} | dir | subdir2${sep}subdir22_added`,
+          `${green_start}source-only${green_end} |     | subdir2${sep}subdir22_added${sep}file221_added.txt`,
+          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}file23_modified_size.txt`,
           `${red_start}target-only${red_end} |     | file6_removed.txt`,
-          `${red_start}target-only${red_end} |     | subdir2\\file24_removed.txt`,
+          `${red_start}target-only${red_end} |     | subdir2${sep}file24_removed.txt`,
           `${red_start}target-only${red_end} | dir | subdir3_removed`,
-          `${red_start}target-only${red_end} |     | subdir3_removed\\file31_removed.txt`,
+          `${red_start}target-only${red_end} |     | subdir3_removed${sep}file31_removed.txt`,
         ]);
       });
 
@@ -344,7 +344,7 @@ describe('compare', () => {
       });
     });
 
-    describe('when "--skip-excess-nested-iterations" option is passed', () => {
+    describe('when "--skip-excess-nested-iterations" argument is passed', () => {
       beforeEach(async () => {
         process.argv = [
           'node',
@@ -372,14 +372,14 @@ describe('compare', () => {
           `${green_start}source-only${green_end} |     | file1_added.txt`,
           `${green_start}source-only${green_end} |     | file2_added.txt`,
           `${green_start}source-only${green_end} | dir | subdir1_added`,
-          `${green_start}source-only${green_end} |     | subdir2\\file22_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2\\subdir21\\file212_added.txt`,
-          `${green_start}source-only${green_end} | dir | subdir2\\subdir22_added`,
+          `${green_start}source-only${green_end} |     | subdir2${sep}file22_added.txt`,
+          `${green_start}source-only${green_end} |     | subdir2${sep}subdir21${sep}file212_added.txt`,
+          `${green_start}source-only${green_end} | dir | subdir2${sep}subdir22_added`,
           `${yellow_start}different  ${yellow_end} |     | file5_modified_content.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2\\file23_modified_size.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2\\subdir21\\file213_modified_content.txt`,
+          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}file23_modified_size.txt`,
+          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}subdir21${sep}file213_modified_content.txt`,
           `${red_start}target-only${red_end} |     | file6_removed.txt`,
-          `${red_start}target-only${red_end} |     | subdir2\\file24_removed.txt`,
+          `${red_start}target-only${red_end} |     | subdir2${sep}file24_removed.txt`,
           `${red_start}target-only${red_end} | dir | subdir3_removed`,
         ]);
       });
