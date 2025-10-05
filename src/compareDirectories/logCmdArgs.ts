@@ -1,16 +1,16 @@
 import { CompareDirectoriesArgsDefinition, CmdArgs } from '../cmd/index.js';
-import { log } from '../logging/index.js';
+import { LoggerInterface } from '../logging/index.js';
 
-const logCmdArgs = (args: CmdArgs): void => {
+const logCmdArgs = ({ cmdArgs, logger }: { cmdArgs: CmdArgs; logger: LoggerInterface }): void => {
   CompareDirectoriesArgsDefinition.forEach(({ name, type, description }) => {
-    const value = args[name];
+    const value = cmdArgs[name];
 
     if (type === String) {
-      log(`${description}: "${value}"`);
+      logger.log(`${description}: "${value}"`);
     }
 
     if (type === Boolean && value === true) {
-      log(`! ${description} (--${name})`);
+      logger.log(`! ${description} (--${name})`);
     }
   });
 };

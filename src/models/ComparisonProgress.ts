@@ -1,11 +1,13 @@
 import { FsEntry } from '@aminzer/dir-diff';
 import * as colors from '../colors/index.js';
 import { DifferenceType } from '../constants/index.js';
-import { log, logSingleLine, clearSingleLine } from '../logging/index.js';
+import { LoggerInterface } from '../logging/index.js';
 import { StatisticKey } from '../types.js';
 import DifferenceSet from './DifferenceSet.js';
 
 class ComparisonProgress {
+  private logger: LoggerInterface;
+
   private statistic: Record<StatisticKey, number> = {
     processedFileCount: 0,
     processedDirCount: 0,
@@ -25,6 +27,10 @@ class ComparisonProgress {
   private statusLoggingDelay: number = 200;
 
   private processingFsEntry: FsEntry | null = null;
+
+  public constructor({ logger }: { logger: LoggerInterface }) {
+    this.logger = logger;
+  }
 
   start(): void {
     this.inProgress = true;
@@ -96,11 +102,11 @@ class ComparisonProgress {
   }
 
   private logStatus(): void {
-    logSingleLine(this.status);
+    this.logger.logSingleLine(this.status);
   }
 
   private clearStatus(): void {
-    clearSingleLine();
+    this.logger.clearSingleLine();
   }
 
   private get status(): string {
@@ -171,7 +177,7 @@ class ComparisonProgress {
     const entryType = this.formatFsEntryType(fsEntry);
     const entryPath = fsEntry.relativePath;
 
-    log(`${formattedDifferenceType} | ${entryType} | ${entryPath}`);
+    this.logger.log(`${formattedDifferenceType} | ${entryType} | ${entryPath}`);
   }
 
   private formatDifferenceType(differenceType: DifferenceType): string {

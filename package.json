@@ -36,6 +36,7 @@
     "lint:fix": "npm run lint -- --fix",
     "prepare": "npm run rebuild",
     "rebuild": "run-s clean build",
+    "test": "tsx --test src/**/*.test.ts",
     "typescript:check": "tsc --project tsconfig.json --noEmit"
   },
   "dependencies": {
@@ -55,6 +56,7 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.44.1"
   },

@@ -1,7 +1,7 @@
 import { compareDirectories as compareDirectoriesUtil, FsEntry } from '@aminzer/dir-diff';
 import { CompareDirectoriesArgs, CmdArgs } from '../cmd/index.js';
 import { DifferenceType } from '../constants/index.js';
-import { log } from '../logging/index.js';
+import { LoggerInterface } from '../logging/index.js';
 import { ComparisonProgress } from '../models/index.js';
 import { getCsvExportFilePath, exportToCsv } from './csvExport.js';
 import logCmdArgs from './logCmdArgs.js';
@@ -17,15 +17,21 @@ const {
   LOG_DIFFERENCE_SET_TO_CSV,
 } = CompareDirectoriesArgs;
 
-const compareDirectories = async (args: CmdArgs): Promise<void> => {
-  const sourceDirPath = args[SOURCE_DIR_PATH] as string;
-  const targetDirPath = args[TARGET_DIR_PATH] as string;
-  const skipSourceOnly = args[SKIP_SOURCE_ONLY] as boolean;
-  const skipTargetOnly = args[SKIP_TARGET_ONLY] as boolean;
-  const skipDifferent = args[SKIP_DIFFERENT] as boolean;
-  const skipContentComparison = args[SKIP_CONTENT_COMPARISON] as boolean;
-  const skipExcessNestedIterations = args[SKIP_EXCESS_NESTED_ITERATIONS] as boolean;
-  const logDifferenceSetToCsv = args[LOG_DIFFERENCE_SET_TO_CSV] as boolean;
+const compareDirectories = async ({
+  cmdArgs,
+  logger,
+}: {
+  cmdArgs: CmdArgs;
+  logger: LoggerInterface;
+}): Promise<void> => {
+  const sourceDirPath = cmdArgs[SOURCE_DIR_PATH] as string;
+  const targetDirPath = cmdArgs[TARGET_DIR_PATH] as string;
+  const skipSourceOnly = cmdArgs[SKIP_SOURCE_ONLY] as boolean;
+  const skipTargetOnly = cmdArgs[SKIP_TARGET_ONLY] as boolean;
+  const skipDifferent = cmdArgs[SKIP_DIFFERENT] as boolean;
+  const skipContentComparison = cmdArgs[SKIP_CONTENT_COMPARISON] as boolean;
+  const skipExcessNestedIterations = cmdArgs[SKIP_EXCESS_NESTED_ITERATIONS] as boolean;
+  const logDifferenceSetToCsv = cmdArgs[LOG_DIFFERENCE_SET_TO_CSV] as boolean;
 
   if (!sourceDirPath) {
     throw new Error(`Source directory is not set: [--${SOURCE_DIR_PATH} <path>]`);
@@ -35,10 +41,10 @@ const compareDirectories = async (args: CmdArgs): Promise<void> => {
     throw new Error(`Target directory is not set: [--${TARGET_DIR_PATH} <path>]`);
   }
 
-  logCmdArgs(args);
-  log();
+  logCmdArgs({ cmdArgs, logger });
+  logger.log('');
 
-  const comparisonProgress = new ComparisonProgress();
+  const comparisonProgress = new ComparisonProgress({ logger });
 
   const compareDirectoriesOpts = {
     onSourceOnlyEntry: skipSourceOnly
@@ -74,11 +80,11 @@ const compareDirectories = async (args: CmdArgs): Promise<void> => {
 
   comparisonProgress.finish();
 
-  log();
-  log();
+  logger.log('');
+  logger.log('');
 
   if (comparisonProgress.areDirectoriesEqual()) {
-    log('Source and target directories have the same content.');
+    logger.log('Source and target directories have the same content.');
     return;
   }
 
@@ -89,8 +95,8 @@ const compareDirectories = async (args: CmdArgs): Promise<void> => {
 
     exportToCsv(comparisonProgress.getDifferenceSet(), csvFilePath);
 
-    log();
-    log(`Directory difference is exported to: "${csvFilePath}"`);
+    logger.log('');
+    logger.log(`Directory difference is exported to: "${csvFilePath}"`);
   }
 };
 
