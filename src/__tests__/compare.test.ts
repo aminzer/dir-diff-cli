@@ -2,11 +2,12 @@ import assert from 'node:assert';
 import { join, sep } from 'node:path';
 import { beforeEach, describe, it } from 'node:test';
 import main from '../main.js';
-import InMemoryLogger from './InMemoryLogger.js';
-import { green_end, green_start, red_end, red_start, yellow_end, yellow_start } from './colors.js';
+import TestDifferenceFormatter from './TestDifferenceFormatter.js';
+import TestLogger from './TestLogger.js';
 
 describe('compare', () => {
-  const logger = new InMemoryLogger();
+  const logger = new TestLogger();
+  const differenceFormatter = new TestDifferenceFormatter();
 
   beforeEach(() => {
     logger.reset();
@@ -19,7 +20,7 @@ describe('compare', () => {
     beforeEach(async () => {
       process.argv = ['node', '.', 'compare', '--source', sourceDirPath, '--target', targetDirPath];
 
-      await main({ logger });
+      await main({ logger, differenceFormatter });
     });
 
     it('outputs the expected log messages', async () => {
@@ -41,7 +42,7 @@ describe('compare', () => {
     beforeEach(async () => {
       process.argv = ['node', '.', 'compare', '--source', sourceDirPath, '--target', targetDirPath];
 
-      await main({ logger });
+      await main({ logger, differenceFormatter });
     });
 
     it('outputs the expected log messages', async () => {
@@ -63,7 +64,7 @@ describe('compare', () => {
     beforeEach(async () => {
       process.argv = ['node', '.', 'compare', '--source', sourceDirPath, '--target', targetDirPath];
 
-      await main({ logger });
+      await main({ logger, differenceFormatter });
     });
 
     it('outputs the expected log messages', async () => {
@@ -85,7 +86,7 @@ describe('compare', () => {
     beforeEach(async () => {
       process.argv = ['node', '.', 'compare', '--source', sourceDirPath, '--target', targetDirPath];
 
-      await main({ logger });
+      await main({ logger, differenceFormatter });
     });
 
     it('outputs the expected log messages', async () => {
@@ -116,7 +117,7 @@ describe('compare', () => {
           targetDirPath,
         ];
 
-        await main({ logger });
+        await main({ logger, differenceFormatter });
       });
 
       it('outputs the expected log messages', async () => {
@@ -126,22 +127,22 @@ describe('compare', () => {
           '',
           '',
           '',
-          `${green_start}source-only${green_end} |     | .dot_file_added`,
-          `${green_start}source-only${green_end} |     | file1_added.txt`,
-          `${green_start}source-only${green_end} |     | file2_added.txt`,
-          `${green_start}source-only${green_end} | dir | subdir1_added`,
-          `${green_start}source-only${green_end} |     | subdir1_added${sep}file11_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2${sep}file22_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2${sep}subdir21${sep}file212_added.txt`,
-          `${green_start}source-only${green_end} | dir | subdir2${sep}subdir22_added`,
-          `${green_start}source-only${green_end} |     | subdir2${sep}subdir22_added${sep}file221_added.txt`,
-          `${yellow_start}different  ${yellow_end} |     | file5_modified_content.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}file23_modified_size.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}subdir21${sep}file213_modified_content.txt`,
-          `${red_start}target-only${red_end} |     | file6_removed.txt`,
-          `${red_start}target-only${red_end} |     | subdir2${sep}file24_removed.txt`,
-          `${red_start}target-only${red_end} | dir | subdir3_removed`,
-          `${red_start}target-only${red_end} |     | subdir3_removed${sep}file31_removed.txt`,
+          `<green>source-only</green> |     | .dot_file_added`,
+          `<green>source-only</green> |     | file1_added.txt`,
+          `<green>source-only</green> |     | file2_added.txt`,
+          `<green>source-only</green> | dir | subdir1_added`,
+          `<green>source-only</green> |     | subdir1_added${sep}file11_added.txt`,
+          `<green>source-only</green> |     | subdir2${sep}file22_added.txt`,
+          `<green>source-only</green> |     | subdir2${sep}subdir21${sep}file212_added.txt`,
+          `<green>source-only</green> | dir | subdir2${sep}subdir22_added`,
+          `<green>source-only</green> |     | subdir2${sep}subdir22_added${sep}file221_added.txt`,
+          `<yellow>different  </yellow> |     | file5_modified_content.txt`,
+          `<yellow>different  </yellow> |     | subdir2${sep}file23_modified_size.txt`,
+          `<yellow>different  </yellow> |     | subdir2${sep}subdir21${sep}file213_modified_content.txt`,
+          `<red>target-only</red> |     | file6_removed.txt`,
+          `<red>target-only</red> |     | subdir2${sep}file24_removed.txt`,
+          `<red>target-only</red> | dir | subdir3_removed`,
+          `<red>target-only</red> |     | subdir3_removed${sep}file31_removed.txt`,
         ]);
       });
 
@@ -149,7 +150,7 @@ describe('compare', () => {
         assert.deepStrictEqual(logger.getSingleLineMessages(), [
           'Comparison is finished.\n' +
             'Processed: 24 files, 7 directories.\n' +
-            `Found: ${green_start}7${green_end} source-only files, ${green_start}2${green_end} source-only dirs, ${yellow_start}3${yellow_end} different files, ${red_start}3${red_end} target-only files, ${red_start}1${red_end} target-only dirs.`,
+            `Found: <green>7</green> source-only files, <green>2</green> source-only dirs, <yellow>3</yellow> different files, <red>3</red> target-only files, <red>1</red> target-only dirs.`,
         ]);
       });
     });
@@ -167,7 +168,7 @@ describe('compare', () => {
           '--skip-source-only',
         ];
 
-        await main({ logger });
+        await main({ logger, differenceFormatter });
       });
 
       it('outputs the expected log messages', async () => {
@@ -178,13 +179,13 @@ describe('compare', () => {
           '',
           '',
           '',
-          `${yellow_start}different  ${yellow_end} |     | file5_modified_content.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}file23_modified_size.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}subdir21${sep}file213_modified_content.txt`,
-          `${red_start}target-only${red_end} |     | file6_removed.txt`,
-          `${red_start}target-only${red_end} |     | subdir2${sep}file24_removed.txt`,
-          `${red_start}target-only${red_end} | dir | subdir3_removed`,
-          `${red_start}target-only${red_end} |     | subdir3_removed${sep}file31_removed.txt`,
+          `<yellow>different  </yellow> |     | file5_modified_content.txt`,
+          `<yellow>different  </yellow> |     | subdir2${sep}file23_modified_size.txt`,
+          `<yellow>different  </yellow> |     | subdir2${sep}subdir21${sep}file213_modified_content.txt`,
+          `<red>target-only</red> |     | file6_removed.txt`,
+          `<red>target-only</red> |     | subdir2${sep}file24_removed.txt`,
+          `<red>target-only</red> | dir | subdir3_removed`,
+          `<red>target-only</red> |     | subdir3_removed${sep}file31_removed.txt`,
         ]);
       });
 
@@ -192,7 +193,7 @@ describe('compare', () => {
         assert.deepStrictEqual(logger.getSingleLineMessages(), [
           'Comparison is finished.\n' +
             'Processed: 24 files, 7 directories.\n' +
-            `Found: ${yellow_start}3${yellow_end} different files, ${red_start}3${red_end} target-only files, ${red_start}1${red_end} target-only dirs.`,
+            `Found: <yellow>3</yellow> different files, <red>3</red> target-only files, <red>1</red> target-only dirs.`,
         ]);
       });
     });
@@ -210,7 +211,7 @@ describe('compare', () => {
           '--skip-target-only',
         ];
 
-        await main({ logger });
+        await main({ logger, differenceFormatter });
       });
 
       it('outputs the expected log messages', async () => {
@@ -221,18 +222,18 @@ describe('compare', () => {
           '',
           '',
           '',
-          `${green_start}source-only${green_end} |     | .dot_file_added`,
-          `${green_start}source-only${green_end} |     | file1_added.txt`,
-          `${green_start}source-only${green_end} |     | file2_added.txt`,
-          `${green_start}source-only${green_end} | dir | subdir1_added`,
-          `${green_start}source-only${green_end} |     | subdir1_added${sep}file11_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2${sep}file22_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2${sep}subdir21${sep}file212_added.txt`,
-          `${green_start}source-only${green_end} | dir | subdir2${sep}subdir22_added`,
-          `${green_start}source-only${green_end} |     | subdir2${sep}subdir22_added${sep}file221_added.txt`,
-          `${yellow_start}different  ${yellow_end} |     | file5_modified_content.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}file23_modified_size.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}subdir21${sep}file213_modified_content.txt`,
+          `<green>source-only</green> |     | .dot_file_added`,
+          `<green>source-only</green> |     | file1_added.txt`,
+          `<green>source-only</green> |     | file2_added.txt`,
+          `<green>source-only</green> | dir | subdir1_added`,
+          `<green>source-only</green> |     | subdir1_added${sep}file11_added.txt`,
+          `<green>source-only</green> |     | subdir2${sep}file22_added.txt`,
+          `<green>source-only</green> |     | subdir2${sep}subdir21${sep}file212_added.txt`,
+          `<green>source-only</green> | dir | subdir2${sep}subdir22_added`,
+          `<green>source-only</green> |     | subdir2${sep}subdir22_added${sep}file221_added.txt`,
+          `<yellow>different  </yellow> |     | file5_modified_content.txt`,
+          `<yellow>different  </yellow> |     | subdir2${sep}file23_modified_size.txt`,
+          `<yellow>different  </yellow> |     | subdir2${sep}subdir21${sep}file213_modified_content.txt`,
         ]);
       });
 
@@ -240,7 +241,7 @@ describe('compare', () => {
         assert.deepStrictEqual(logger.getSingleLineMessages(), [
           'Comparison is finished.\n' +
             'Processed: 24 files, 7 directories.\n' +
-            `Found: ${green_start}7${green_end} source-only files, ${green_start}2${green_end} source-only dirs, ${yellow_start}3${yellow_end} different files.`,
+            `Found: <green>7</green> source-only files, <green>2</green> source-only dirs, <yellow>3</yellow> different files.`,
         ]);
       });
     });
@@ -258,7 +259,7 @@ describe('compare', () => {
           '--skip-different',
         ];
 
-        await main({ logger });
+        await main({ logger, differenceFormatter });
       });
 
       it('outputs the expected log messages', async () => {
@@ -269,19 +270,19 @@ describe('compare', () => {
           '',
           '',
           '',
-          `${green_start}source-only${green_end} |     | .dot_file_added`,
-          `${green_start}source-only${green_end} |     | file1_added.txt`,
-          `${green_start}source-only${green_end} |     | file2_added.txt`,
-          `${green_start}source-only${green_end} | dir | subdir1_added`,
-          `${green_start}source-only${green_end} |     | subdir1_added${sep}file11_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2${sep}file22_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2${sep}subdir21${sep}file212_added.txt`,
-          `${green_start}source-only${green_end} | dir | subdir2${sep}subdir22_added`,
-          `${green_start}source-only${green_end} |     | subdir2${sep}subdir22_added${sep}file221_added.txt`,
-          `${red_start}target-only${red_end} |     | file6_removed.txt`,
-          `${red_start}target-only${red_end} |     | subdir2${sep}file24_removed.txt`,
-          `${red_start}target-only${red_end} | dir | subdir3_removed`,
-          `${red_start}target-only${red_end} |     | subdir3_removed${sep}file31_removed.txt`,
+          `<green>source-only</green> |     | .dot_file_added`,
+          `<green>source-only</green> |     | file1_added.txt`,
+          `<green>source-only</green> |     | file2_added.txt`,
+          `<green>source-only</green> | dir | subdir1_added`,
+          `<green>source-only</green> |     | subdir1_added${sep}file11_added.txt`,
+          `<green>source-only</green> |     | subdir2${sep}file22_added.txt`,
+          `<green>source-only</green> |     | subdir2${sep}subdir21${sep}file212_added.txt`,
+          `<green>source-only</green> | dir | subdir2${sep}subdir22_added`,
+          `<green>source-only</green> |     | subdir2${sep}subdir22_added${sep}file221_added.txt`,
+          `<red>target-only</red> |     | file6_removed.txt`,
+          `<red>target-only</red> |     | subdir2${sep}file24_removed.txt`,
+          `<red>target-only</red> | dir | subdir3_removed`,
+          `<red>target-only</red> |     | subdir3_removed${sep}file31_removed.txt`,
         ]);
       });
 
@@ -289,7 +290,7 @@ describe('compare', () => {
         assert.deepStrictEqual(logger.getSingleLineMessages(), [
           'Comparison is finished.\n' +
             'Processed: 24 files, 7 directories.\n' +
-            `Found: ${green_start}7${green_end} source-only files, ${green_start}2${green_end} source-only dirs, ${red_start}3${red_end} target-only files, ${red_start}1${red_end} target-only dirs.`,
+            `Found: <green>7</green> source-only files, <green>2</green> source-only dirs, <red>3</red> target-only files, <red>1</red> target-only dirs.`,
         ]);
       });
     });
@@ -307,7 +308,7 @@ describe('compare', () => {
           '--skip-content-comparison',
         ];
 
-        await main({ logger });
+        await main({ logger, differenceFormatter });
       });
 
       it('outputs the expected log messages', async () => {
@@ -318,20 +319,20 @@ describe('compare', () => {
           '',
           '',
           '',
-          `${green_start}source-only${green_end} |     | .dot_file_added`,
-          `${green_start}source-only${green_end} |     | file1_added.txt`,
-          `${green_start}source-only${green_end} |     | file2_added.txt`,
-          `${green_start}source-only${green_end} | dir | subdir1_added`,
-          `${green_start}source-only${green_end} |     | subdir1_added${sep}file11_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2${sep}file22_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2${sep}subdir21${sep}file212_added.txt`,
-          `${green_start}source-only${green_end} | dir | subdir2${sep}subdir22_added`,
-          `${green_start}source-only${green_end} |     | subdir2${sep}subdir22_added${sep}file221_added.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}file23_modified_size.txt`,
-          `${red_start}target-only${red_end} |     | file6_removed.txt`,
-          `${red_start}target-only${red_end} |     | subdir2${sep}file24_removed.txt`,
-          `${red_start}target-only${red_end} | dir | subdir3_removed`,
-          `${red_start}target-only${red_end} |     | subdir3_removed${sep}file31_removed.txt`,
+          `<green>source-only</green> |     | .dot_file_added`,
+          `<green>source-only</green> |     | file1_added.txt`,
+          `<green>source-only</green> |     | file2_added.txt`,
+          `<green>source-only</green> | dir | subdir1_added`,
+          `<green>source-only</green> |     | subdir1_added${sep}file11_added.txt`,
+          `<green>source-only</green> |     | subdir2${sep}file22_added.txt`,
+          `<green>source-only</green> |     | subdir2${sep}subdir21${sep}file212_added.txt`,
+          `<green>source-only</green> | dir | subdir2${sep}subdir22_added`,
+          `<green>source-only</green> |     | subdir2${sep}subdir22_added${sep}file221_added.txt`,
+          `<yellow>different  </yellow> |     | subdir2${sep}file23_modified_size.txt`,
+          `<red>target-only</red> |     | file6_removed.txt`,
+          `<red>target-only</red> |     | subdir2${sep}file24_removed.txt`,
+          `<red>target-only</red> | dir | subdir3_removed`,
+          `<red>target-only</red> |     | subdir3_removed${sep}file31_removed.txt`,
         ]);
       });
 
@@ -339,7 +340,7 @@ describe('compare', () => {
         assert.deepStrictEqual(logger.getSingleLineMessages(), [
           'Comparison is finished.\n' +
             'Processed: 24 files, 7 directories.\n' +
-            `Found: ${green_start}7${green_end} source-only files, ${green_start}2${green_end} source-only dirs, ${yellow_start}1${yellow_end} different files, ${red_start}3${red_end} target-only files, ${red_start}1${red_end} target-only dirs.`,
+            `Found: <green>7</green> source-only files, <green>2</green> source-only dirs, <yellow>1</yellow> different files, <red>3</red> target-only files, <red>1</red> target-only dirs.`,
         ]);
       });
     });
@@ -357,7 +358,7 @@ describe('compare', () => {
           '--skip-excess-nested-iterations',
         ];
 
-        await main({ logger });
+        await main({ logger, differenceFormatter });
       });
 
       it('outputs the expected log messages', async () => {
@@ -368,19 +369,19 @@ describe('compare', () => {
           '',
           '',
           '',
-          `${green_start}source-only${green_end} |     | .dot_file_added`,
-          `${green_start}source-only${green_end} |     | file1_added.txt`,
-          `${green_start}source-only${green_end} |     | file2_added.txt`,
-          `${green_start}source-only${green_end} | dir | subdir1_added`,
-          `${green_start}source-only${green_end} |     | subdir2${sep}file22_added.txt`,
-          `${green_start}source-only${green_end} |     | subdir2${sep}subdir21${sep}file212_added.txt`,
-          `${green_start}source-only${green_end} | dir | subdir2${sep}subdir22_added`,
-          `${yellow_start}different  ${yellow_end} |     | file5_modified_content.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}file23_modified_size.txt`,
-          `${yellow_start}different  ${yellow_end} |     | subdir2${sep}subdir21${sep}file213_modified_content.txt`,
-          `${red_start}target-only${red_end} |     | file6_removed.txt`,
-          `${red_start}target-only${red_end} |     | subdir2${sep}file24_removed.txt`,
-          `${red_start}target-only${red_end} | dir | subdir3_removed`,
+          `<green>source-only</green> |     | .dot_file_added`,
+          `<green>source-only</green> |     | file1_added.txt`,
+          `<green>source-only</green> |     | file2_added.txt`,
+          `<green>source-only</green> | dir | subdir1_added`,
+          `<green>source-only</green> |     | subdir2${sep}file22_added.txt`,
+          `<green>source-only</green> |     | subdir2${sep}subdir21${sep}file212_added.txt`,
+          `<green>source-only</green> | dir | subdir2${sep}subdir22_added`,
+          `<yellow>different  </yellow> |     | file5_modified_content.txt`,
+          `<yellow>different  </yellow> |     | subdir2${sep}file23_modified_size.txt`,
+          `<yellow>different  </yellow> |     | subdir2${sep}subdir21${sep}file213_modified_content.txt`,
+          `<red>target-only</red> |     | file6_removed.txt`,
+          `<red>target-only</red> |     | subdir2${sep}file24_removed.txt`,
+          `<red>target-only</red> | dir | subdir3_removed`,
         ]);
       });
 
@@ -388,7 +389,7 @@ describe('compare', () => {
         assert.deepStrictEqual(logger.getSingleLineMessages(), [
           'Comparison is finished.\n' +
             'Processed: 21 files, 7 directories.\n' +
-            `Found: ${green_start}5${green_end} source-only files, ${green_start}2${green_end} source-only dirs, ${yellow_start}3${yellow_end} different files, ${red_start}2${red_end} target-only files, ${red_start}1${red_end} target-only dirs.`,
+            `Found: <green>5</green> source-only files, <green>2</green> source-only dirs, <yellow>3</yellow> different files, <red>2</red> target-only files, <red>1</red> target-only dirs.`,
         ]);
       });
     });

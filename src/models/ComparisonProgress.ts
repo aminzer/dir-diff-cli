@@ -1,5 +1,5 @@
 import { FsEntry } from '@aminzer/dir-diff';
-import * as colors from '../colors/index.js';
+import { DifferenceFormatterInterface } from '../formatters/index.js';
 import { DifferenceType } from '../constants/index.js';
 import { LoggerInterface } from '../logging/index.js';
 import { StatisticKey } from '../types.js';
@@ -7,6 +7,7 @@ import DifferenceSet from './DifferenceSet.js';
 
 class ComparisonProgress {
   private logger: LoggerInterface;
+  private differenceFormatter: DifferenceFormatterInterface;
 
   private statistic: Record<StatisticKey, number> = {
     processedFileCount: 0,
@@ -28,8 +29,15 @@ class ComparisonProgress {
 
   private processingFsEntry: FsEntry | null = null;
 
-  public constructor({ logger }: { logger: LoggerInterface }) {
+  public constructor({
+    logger,
+    differenceFormatter,
+  }: {
+    logger: LoggerInterface;
+    differenceFormatter: DifferenceFormatterInterface;
+  }) {
     this.logger = logger;
+    this.differenceFormatter = differenceFormatter;
   }
 
   start(): void {
@@ -140,23 +148,33 @@ class ComparisonProgress {
     const foundEntries = [];
 
     if (sourceOnlyFileCount > 0) {
-      foundEntries.push(`${colors.sourceOnly(sourceOnlyFileCount)} source-only files`);
+      foundEntries.push(
+        `${this.differenceFormatter.sourceOnly(sourceOnlyFileCount)} source-only files`,
+      );
     }
 
     if (sourceOnlyDirCount > 0) {
-      foundEntries.push(`${colors.sourceOnly(sourceOnlyDirCount)} source-only dirs`);
+      foundEntries.push(
+        `${this.differenceFormatter.sourceOnly(sourceOnlyDirCount)} source-only dirs`,
+      );
     }
 
     if (differentFileCount > 0) {
-      foundEntries.push(`${colors.different(differentFileCount)} different files`);
+      foundEntries.push(
+        `${this.differenceFormatter.different(differentFileCount)} different files`,
+      );
     }
 
     if (targetOnlyFileCount > 0) {
-      foundEntries.push(`${colors.targetOnly(targetOnlyFileCount)} target-only files`);
+      foundEntries.push(
+        `${this.differenceFormatter.targetOnly(targetOnlyFileCount)} target-only files`,
+      );
     }
 
     if (targetOnlyDirCount > 0) {
-      foundEntries.push(`${colors.targetOnly(targetOnlyDirCount)} target-only dirs`);
+      foundEntries.push(
+        `${this.differenceFormatter.targetOnly(targetOnlyDirCount)} target-only dirs`,
+      );
     }
 
     if (foundEntries.length === 0) {
@@ -183,13 +201,13 @@ class ComparisonProgress {
   private formatDifferenceType(differenceType: DifferenceType): string {
     switch (differenceType) {
       case DifferenceType.SOURCE_ONLY:
-        return colors.sourceOnly('source-only');
+        return this.differenceFormatter.sourceOnly('source-only');
 
       case DifferenceType.TARGET_ONLY:
-        return colors.targetOnly('target-only');
+        return this.differenceFormatter.targetOnly('target-only');
 
       case DifferenceType.DIFFERENT:
-        return colors.different('different  ');
+        return this.differenceFormatter.different('different  ');
 
       default:
         return '';

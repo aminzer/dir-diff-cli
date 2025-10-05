@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { parseCmdArgs, Commands } from './cmd/index.js';
+import DifferenceFormatterInterface from './formatters/DifferenceFormatterInterface.js';
 import compareDirectories from './compareDirectories/index.js';
 import { LoggerInterface } from './logging/index.js';
 import showHelpMessage from './showHelpMessage/index.js';
@@ -9,9 +10,15 @@ import showVersion from './showVersion/index.js';
 const allowedCommands = Object.values(Commands);
 const formattedAllowedCommands = allowedCommands.map((c) => `"${c}"`).join(', ');
 
-const main = async ({ logger }: { logger: LoggerInterface }): Promise<void> => {
+const main = async ({
+  logger,
+  differenceFormatter,
+}: {
+  logger: LoggerInterface;
+  differenceFormatter: DifferenceFormatterInterface;
+}): Promise<void> => {
   try {
-    const { command, args } = parseCmdArgs();
+    const { command, args: cmdArgs } = parseCmdArgs();
 
     if (!command) {
       throw new Error(`Command is not set. Allowed commands: ${formattedAllowedCommands}.`);
@@ -32,7 +39,7 @@ const main = async ({ logger }: { logger: LoggerInterface }): Promise<void> => {
     }
 
     if (command === Commands.COMPARE_DIRECTORIES) {
-      await compareDirectories({ cmdArgs: args, logger });
+      await compareDirectories({ cmdArgs, logger, differenceFormatter });
     }
   } catch (err) {
     logger.log('');

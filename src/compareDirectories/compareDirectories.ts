@@ -1,5 +1,6 @@
 import { compareDirectories as compareDirectoriesUtil, FsEntry } from '@aminzer/dir-diff';
 import { CompareDirectoriesArgs, CmdArgs } from '../cmd/index.js';
+import DifferenceFormatterInterface from '../formatters/DifferenceFormatterInterface.js';
 import { DifferenceType } from '../constants/index.js';
 import { LoggerInterface } from '../logging/index.js';
 import { ComparisonProgress } from '../models/index.js';
@@ -20,9 +21,11 @@ const {
 const compareDirectories = async ({
   cmdArgs,
   logger,
+  differenceFormatter,
 }: {
   cmdArgs: CmdArgs;
   logger: LoggerInterface;
+  differenceFormatter: DifferenceFormatterInterface;
 }): Promise<void> => {
   const sourceDirPath = cmdArgs[SOURCE_DIR_PATH] as string;
   const targetDirPath = cmdArgs[TARGET_DIR_PATH] as string;
@@ -44,7 +47,7 @@ const compareDirectories = async ({
   logCmdArgs({ cmdArgs, logger });
   logger.log('');
 
-  const comparisonProgress = new ComparisonProgress({ logger });
+  const comparisonProgress = new ComparisonProgress({ logger, differenceFormatter });
 
   const compareDirectoriesOpts = {
     onSourceOnlyEntry: skipSourceOnly

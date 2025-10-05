@@ -1,6 +1,6 @@
 import { LoggerInterface } from '../logging/index.js';
 
-class InMemoryLogger implements LoggerInterface {
+class TestLogger implements LoggerInterface {
   private _messages: string[] = [];
   private _singleLineMessages: string[] = [];
 
@@ -30,4 +30,4 @@ class InMemoryLogger implements LoggerInterface {
   }
 }
 
-export default InMemoryLogger;
+export default TestLogger;
