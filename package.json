@@ -1,6 +1,6 @@
 {
   "name": "@aminzer/dir-diff-cli",
-  "version": "3.1.2",
+  "version": "3.1.3",
   "description": "Command line tool for recursive directory comparison",
   "publishConfig": {
     "access": "public"
@@ -40,7 +40,7 @@
     "typescript:check": "tsc --project tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@aminzer/dir-diff": "^5.1.2",
+    "@aminzer/dir-diff": "^5.1.3",
     "chalk": "^5.6.2",
     "command-line-args": "^5.2.1",
     "single-line-log": "^1.1.2"
